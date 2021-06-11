@@ -80,6 +80,7 @@
         "@typescript-eslint/no-non-null-assertion": 0,
         "no-empty": 0,
         "@typescript-eslint/no-empty-interface": 1,
-        "no-empty-pattern":1
+        "no-empty-pattern": 1,
+        "jsx-a11y/media-has-caption": 0
     }
 }

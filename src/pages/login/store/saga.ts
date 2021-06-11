@@ -11,7 +11,9 @@ import { IRootReducer } from '@src/store/types/root-reducer.interface';
 import { TOKEN_KEY } from '@src/common/constant/constant';
 import { ReducerActionType } from '../types/action.type';
 import { IAuth } from '../types/response.interface';
-import { changeAuthDataAction, changeLoginStatusAction, getState } from './actions';
+import {
+  changeAuthDataAction, changeLoginBtnLoadingAction, changeLoginStatusAction, getState,
+} from './actions';
 
 function* sendLoginRequest(action: ReducerActionType) {
   const state:IRootReducer = yield select(getState);
@@ -31,6 +33,8 @@ function* sendLoginRequest(action: ReducerActionType) {
     } else {
       window.sessionStorage.removeItem(TOKEN_KEY);
     }
+    yield put(changeLoginStatusAction(false));
+    yield put(changeLoginBtnLoadingAction(false));
     yield message.error(error.response.data.message);
   }
 }

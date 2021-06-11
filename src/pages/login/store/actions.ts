@@ -2,7 +2,11 @@ import { IValues } from '@pages/login';
 import { IAuth } from '@pages/login/types/response.interface';
 import { IRootReducer } from '@src/store/types/root-reducer.interface';
 import {
-  ChangeAuthDataAction, ChangeIsRemember, ChangeLoginStatusAction, SendLoginRequestAction,
+  ChangeAuthDataAction,
+  ChangeIsRememberAction,
+  ChangeLoginBtnLoadingAction,
+  ChangeLoginStatusAction,
+  SendLoginRequestAction,
 } from '../types/action.type';
 import { ActionType } from './constant';
 // 获取 store 中的 state
@@ -23,9 +27,16 @@ export const changeAuthDataAction = (data:IAuth):ChangeAuthDataAction => ({
   data,
 });
 // 改变是否记住登录
-export const changeWhetherRememberAction = (IsRemember:boolean):ChangeIsRemember => ({
+export const changeWhetherRememberAction = (IsRemember:boolean):ChangeIsRememberAction => ({
   type: ActionType.CHANGE_WHETHER_REMEMBER,
   data: {
     IsRemember,
+  },
+});
+// 改变登陆页 btn按钮的loading效果
+export const changeLoginBtnLoadingAction = (isLoading:boolean):ChangeLoginBtnLoadingAction => ({
+  type: ActionType.CHANGE_AUTH_BUTTON_LOADING,
+  data: {
+    isLoading,
   },
 });

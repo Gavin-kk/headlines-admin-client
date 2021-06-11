@@ -8,6 +8,7 @@ const defaultState:LoginStateInterface = {
   whetherToLogIn: false,
   IsRemember: true,
   authInfo: null,
+  loading: false,
 };
 
 function reducer(state = defaultState, action:ReducerActionType):LoginStateInterface {
@@ -21,6 +22,9 @@ function reducer(state = defaultState, action:ReducerActionType):LoginStateInter
         return draft;
       case ActionType.CHANGE_WHETHER_REMEMBER:
         draft.IsRemember = action.data.IsRemember;
+        return draft;
+      case ActionType.CHANGE_AUTH_BUTTON_LOADING:
+        draft.loading = action.data.isLoading;
         return draft;
       default:
         return draft;
