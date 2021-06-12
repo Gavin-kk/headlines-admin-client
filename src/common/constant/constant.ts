@@ -1,1 +1,1 @@
-export const TOKEN_KEY = 'headlines-layout-token';
+export const TOKEN_KEY = 'headlines-admin-token';

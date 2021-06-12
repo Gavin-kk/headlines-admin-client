@@ -1,4 +1,5 @@
-import { saga as loginSata } from '@pages/login/store';
+import { saga as loginSaga } from '@pages/login/store';
+import { saga as adminSaga } from '@pages/layout/store';
 
-const sagaArr:(() => Generator)[] = [loginSata];
+const sagaArr:(() => Generator)[] = [loginSaga, adminSaga];
 export default sagaArr;

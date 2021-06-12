@@ -5,10 +5,17 @@ import { DownOutlined } from '@ant-design/icons';
 import { NavLink } from 'react-router-dom';
 import { TOKEN_KEY } from '@common/constant/constant';
 import { useHistory } from 'react-router';
+import { shallowEqual, useSelector } from 'react-redux';
+import { IRootReducer } from '@src/store/types/root-reducer.interface';
 import { ContentWrapper, HeaderWrapper } from './style';
 
 const MHeader: FC = () => {
+  const { userinfo } = useSelector((state:IRootReducer) => ({
+    userinfo: state.admin.userinfo,
+  }), shallowEqual);
+
   const history = useHistory();
+
   const exit = () => {
     window.localStorage.removeItem(TOKEN_KEY);
     window.sessionStorage.removeItem(TOKEN_KEY);
@@ -17,7 +24,7 @@ const MHeader: FC = () => {
 
   const content = (
     <ContentWrapper>
-      <NavLink to="/home">个人中心</NavLink>
+      <NavLink to="/personal">个人中心</NavLink>
       <a onClick={exit}>退出登录</a>
     </ContentWrapper>
   );
@@ -29,11 +36,11 @@ const MHeader: FC = () => {
         <Popover placement="bottom" content={content} trigger="click">
           <div className="header-left-box">
             <img
-              src="http://localhost:5000/static/863d67fdf411bc619ef522e2e0eedd5eb299ec2d.jpg@52w_52h.png"
+              src={userinfo?.avatar}
               alt=""
             />
             <div className="username">
-              admin
+              {userinfo?.username}
             </div>
             <DownOutlined className="user-icon" />
           </div>

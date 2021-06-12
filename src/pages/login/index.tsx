@@ -20,7 +20,7 @@ import { LoginWrapper, Video } from './style';
 export interface IValues {
   username:string;
   password:string;
-  remember:boolean
+  remember:boolean;
 }
 
 const verifyEmail = (rule: any, value:string) => {
