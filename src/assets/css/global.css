@@ -4,3 +4,7 @@
 /*#root {*/
 /*    height: 100%;*/
 /*}*/
+
+.global-card {
+    margin-top: 20px !important;
+}

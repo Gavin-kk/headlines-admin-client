@@ -14,26 +14,26 @@ export const weatherIconArr:IWeatherIconType[] = [
   {
     title: '云',
     type: SkyconsType.CLOUDY,
-    color: 'rgb(255,153,0)',
+    color: 'rgb(194,192,188)',
   },
   {
     title: '雨',
     type: SkyconsType.RAIN,
-    color: 'rgb(48,73,76)',
+    color: 'rgb(97,237,248)',
   },
   {
     title: '雪',
     type: SkyconsType.SNOW,
-    color: 'rgb(35,168,242)',
+    color: 'rgb(198,227,243)',
   },
   {
     title: '风',
     type: SkyconsType.WIND,
-    color: 'rgb(42,60,66)',
+    color: 'rgb(208,204,185)',
   },
   {
     title: '雾',
     type: SkyconsType.FOG,
-    color: 'rgb(113,221,250)',
+    color: 'rgb(169,164,158)',
   },
 ];

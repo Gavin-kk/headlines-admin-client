@@ -1,4 +1,5 @@
 import React, { memo, FC } from 'react';
+import { DatePicker, Form, Space } from 'antd';
 
 interface IProps {
 
@@ -6,7 +7,11 @@ interface IProps {
 
 const Home: FC<IProps> = ({}) => (
   <>
-    <h2>home</h2>
+    <Form.Item label="DatePicker">
+      <Space direction="vertical" size={12}>
+        <DatePicker size="small" />
+      </Space>
+    </Form.Item>
   </>
 );
 

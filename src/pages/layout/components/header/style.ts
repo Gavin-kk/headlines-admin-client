@@ -7,13 +7,14 @@ export const HeaderWrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   
-  .header-left-box {
+  .header-right-box {
     width: 100px;
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    margin-right: 50px;
     
     img {
       width:40px;

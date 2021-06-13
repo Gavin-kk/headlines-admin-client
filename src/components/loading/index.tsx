@@ -5,7 +5,7 @@ interface IProps {
     size?:'small' | 'default' | 'large' | undefined
 }
 
-const Loading: FC<IProps> = (props:IProps): ReactElement => (
+const Loading: FC<IProps> = ({ size = 'small' }): ReactElement => (
   <Spin
     tip="请稍候..."
     style={
@@ -16,13 +16,9 @@ const Loading: FC<IProps> = (props:IProps): ReactElement => (
         transform: 'translate(-50%, -50%)',
       }
     }
-    size={props.size}
+    size={size}
     delay={200}
   />
 );
-
-Loading.defaultProps = {
-  size: undefined,
-};
 
 export default memo(Loading);
