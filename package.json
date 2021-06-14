@@ -3,10 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@types/braft-editor": "^2.2.0",
     "@types/json-bigint": "^1.0.0",
     "ahooks": "^2.10.5",
     "antd": "^4.16.2",
     "axios": "^0.21.1",
+    "braft-editor": "^2.3.9",
     "craco": "^0.0.3",
     "craco-alias": "^3.0.1",
     "craco-antd": "^1.19.0",

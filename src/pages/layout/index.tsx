@@ -74,7 +74,7 @@ const Admin: FC<IProps> = ({
             {/* 头部组件 */}
             <MHeader />
           </Header>
-          <Content style={{ padding: '0 50px' }}>
+          <Content style={{ padding: '20px 50px 0 50px' }}>
             {/* 渲染路由 */}
             <Suspense fallback={<Loading />}>
               {renderRoutes(route?.routes)}

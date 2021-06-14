@@ -7,7 +7,7 @@ import { ArticleWrapper } from './style';
 
 const Article: FC = () => (
   <ArticleWrapper>
-    <Card className="global-card" title={<Bread />}>
+    <Card title={<Bread />}>
       {/* 筛选组件 */}
       <Filter />
       {/* 筛选结果表格组件 */}
