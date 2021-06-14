@@ -1,15 +1,17 @@
 import {
-  Table, Image, Button, Tag,
+  Table, Image, Button, Tag, Spin, Popconfirm,
 } from 'antd';
 import React, {
-  memo, FC, useEffect, useMemo, useCallback, useState,
+  memo, FC, useEffect, useMemo, useCallback, Fragment, Suspense, useState,
 } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { IRootReducer } from '@src/store/types/root-reducer.interface';
 import moment from 'moment';
 import { faultToleranceImg } from '@src/assets/img/base64/fault-tolerance.img';
+import Loading from '@components/loading';
+import { Content } from 'antd/lib/layout/layout';
 import { TableWrapper } from './style';
-import { getArticleListAction } from '../../store/actions';
+import { getArticleListAction, deleteArticlesAction } from '../../store/actions';
 import { IList } from '../../types/response.interface';
 
 export enum ArticleStatus {
@@ -20,55 +22,52 @@ export enum ArticleStatus {
   deleted = '4',
 }
 
+// 处理 状态tag显示
+const handleTag = (value:string):JSX.Element => {
+  const arr: { color:string, content:string }[] = [
+    { color: 'default', content: '草稿' },
+    { color: 'processing', content: '等待审核' },
+    { color: 'success', content: '审核通过' },
+    { color: 'error', content: '审核失败' },
+    { color: 'warning', content: '已删除' },
+  ];
+  return <Tag color={arr[parseInt(value, 10)].color}>{arr[parseInt(value, 10)].content}</Tag>;
+};
+
 const MTable: FC = () => {
-  const { articleInfo } = useSelector((state:IRootReducer) => ({
+  const { articleInfo, articleListLoad } = useSelector((state:IRootReducer) => ({
     articleInfo: state.article.articleInfo,
+    articleListLoad: state.article.articleListLoad,
   }), shallowEqual);
 
-  const [pageNum, setPageNum] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<number>(10);
+  // loading 加载状态
+  const [loading, setLoading] = useState<boolean>(true);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getArticleListAction({}));
   }, []);
-  // 处理 状态tag显示
-  const handleTag = useCallback((value:string):JSX.Element => {
-    let color = '';
-    let content = '';
-    switch (value) {
-      case '1':
-        color = '#f5eac1';
-        content = '等待审核';
-        break;
-      case '2':
-        color = '#40f824';
-        content = '审核通过';
-        break;
-      case '3':
-        color = '#ff0000';
-        content = '审核失败';
-        break;
-      case '4':
-        color = '#ffab00';
-        content = '已删除';
-        break;
-      default:
-        color = '#108ee9';
-        content = '草稿';
-    }
-    return <Tag color={color}>{content}</Tag>;
-  }, []);
 
-  const columns = [
+  useEffect(() => {
+    if (articleInfo) {
+      setLoading(false);
+    }
+  }, [articleInfo]);
+
+  const paginationChange = useCallback((pageNum:number, pageSize?:number) => {
+    dispatch(getArticleListAction({ pageNum, pageSize, ...articleListLoad }));
+  }, [articleListLoad]);
+
+  const columns = useMemo(() => [
     {
       title: '封面',
       width: 90,
       render(rowData:IList):JSX.Element {
         return (
-          <div key={rowData.createTime}>
+          <Fragment key={rowData.createTime}>
             { rowData.cover.length
-              ? <img src={rowData.cover[0]} alt="封面" width={52} height={52} />
+              ? <Image src={rowData.cover[0]} alt="封面" width={52} height={52} fallback={faultToleranceImg} />
               : (
                 <Image
                   width={52}
@@ -77,7 +76,7 @@ const MTable: FC = () => {
                   fallback={faultToleranceImg}
                 />
               )}
-          </div>
+          </Fragment>
         );
       },
     },
@@ -114,33 +113,42 @@ const MTable: FC = () => {
     {
       title: '操作',
       render(rowData: IList):JSX.Element {
+        const deleteArticle = () => {
+          dispatch(deleteArticlesAction(rowData.id));
+        };
         return (
           <>
-            <Button>编辑</Button>
-            <Button danger>删除</Button>
+            <Button type="primary" style={{ margin: '0 10px' }}>编辑</Button>
+            <Popconfirm
+              title="确定删除吗"
+              onConfirm={deleteArticle}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button danger>删除</Button>
+            </Popconfirm>
+            ,
           </>
         );
       },
     },
-  ];
+  ], []);
 
-  const paginationChange = (pageNum:number, pageSize?:number) => {
-    dispatch(getArticleListAction({ pageNum, pageSize }));
-    setPageNum(pageNum);
-    setPageSize(pageSize as number);
-  };
   return (
     <TableWrapper>
       <Table
         columns={columns}
         dataSource={articleInfo?.list}
         rowKey="id"
+        loading={loading}
         pagination={{
-          pageSize,
-          current: pageNum,
+          pageSize: articleInfo?.pageSize ? parseInt(articleInfo?.pageSize, 10) : 10,
+          current: articleInfo?.pageNum ? parseInt(articleInfo?.pageNum, 10) : 1,
           total: articleInfo?.total,
           showQuickJumper: true,
           onChange: paginationChange,
+          showSizeChanger: true,
+          disabled: loading,
         }}
       />
     </TableWrapper>

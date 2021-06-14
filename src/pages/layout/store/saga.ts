@@ -23,8 +23,15 @@ function* getUserInfo() {
   }
 }
 
+function* exitLogin() {
+  window.localStorage.removeItem(TOKEN_KEY);
+  window.sessionStorage.removeItem(TOKEN_KEY);
+  yield;
+}
+
 function* saga(): Generator<ForkEffect<never>> {
   yield takeEvery(ActionType.GET_USER_INFO, getUserInfo);
+  yield takeEvery(ActionType.EXIT_LOGIN, exitLogin);
 }
 
 export default saga;

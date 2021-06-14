@@ -1,9 +1,9 @@
 @import "./reset.css";
 @import '~antd/dist/antd.css';
 
-/*#root {*/
-/*    height: 100%;*/
-/*}*/
+#root {
+    min-width: 800px;
+}
 
 .global-card {
     margin-top: 20px !important;

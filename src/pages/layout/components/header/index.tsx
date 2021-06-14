@@ -7,8 +7,11 @@ import { DownOutlined } from '@ant-design/icons';
 import { NavLink } from 'react-router-dom';
 import { TOKEN_KEY } from '@common/constant/constant';
 import { useHistory } from 'react-router';
-import { shallowEqual, useSelector } from 'react-redux';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { IRootReducer } from '@src/store/types/root-reducer.interface';
+import { Dispatch } from 'redux';
+import { ReducerActionType } from '@pages/layout/types/action.type';
+import { exitLoginAction } from '@pages/layout/store/actions';
 import { ContentWrapper, HeaderWrapper } from './style';
 
 const MHeader: FC = () => {
@@ -17,10 +20,10 @@ const MHeader: FC = () => {
   }), shallowEqual);
 
   const history = useHistory();
-
+  const dispatch = useDispatch<Dispatch<ReducerActionType>>();
   const exit = useCallback(() => {
-    window.localStorage.removeItem(TOKEN_KEY);
-    window.sessionStorage.removeItem(TOKEN_KEY);
+    // 派发退出行为
+    dispatch(exitLoginAction);
     history.replace('/login');
   }, []);
 
