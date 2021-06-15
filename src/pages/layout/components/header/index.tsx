@@ -1,6 +1,4 @@
-import React, {
-  memo, FC, useCallback, useMemo,
-} from 'react';
+import React, { memo, FC, useCallback, useMemo } from 'react';
 import Weather from '@components/weather';
 import { Popconfirm, Popover } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
@@ -14,9 +12,12 @@ import { exitLoginAction } from '@pages/layout/store/actions';
 import { ContentWrapper, HeaderWrapper } from './style';
 
 const MHeader: FC = () => {
-  const { userinfo } = useSelector((state:IRootReducer) => ({
-    userinfo: state.admin.userinfo,
-  }), shallowEqual);
+  const { userinfo } = useSelector(
+    (state: IRootReducer) => ({
+      userinfo: state.admin.userinfo,
+    }),
+    shallowEqual,
+  );
 
   const history = useHistory();
   const dispatch = useDispatch<Dispatch<ReducerActionType>>();
@@ -44,13 +45,8 @@ const MHeader: FC = () => {
       <>
         <Popover placement="bottom" content={content} trigger="click">
           <div className="header-right-box">
-            <img
-              src={userinfo?.avatar}
-              alt=""
-            />
-            <div className="username">
-              {userinfo?.username}
-            </div>
+            <img src={userinfo?.avatar} alt="" />
+            <div className="username">{userinfo?.username}</div>
             <DownOutlined className="user-icon" />
           </div>
         </Popover>

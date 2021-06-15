@@ -5,11 +5,9 @@ import Loading from '@components/loading';
 import { renderRoutes } from 'react-router-config';
 import routers from './router';
 
-const App:FC = ():React.ReactElement => (
+const App: FC = (): React.ReactElement => (
   <BrowserRouter>
-    <Suspense fallback={<Loading />}>
-      {renderRoutes(routers)}
-    </Suspense>
+    <Suspense fallback={<Loading />}>{renderRoutes(routers)}</Suspense>
   </BrowserRouter>
 );
 

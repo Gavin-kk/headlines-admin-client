@@ -1,12 +1,18 @@
 import {
-  CopyOutlined, FileDoneOutlined, FolderOpenOutlined, FormOutlined, HomeOutlined, TeamOutlined, UserOutlined,
+  CopyOutlined,
+  FileDoneOutlined,
+  FolderOpenOutlined,
+  FormOutlined,
+  HomeOutlined,
+  TeamOutlined,
+  UserOutlined,
 } from '@ant-design/icons';
 import React from 'react';
 
 export interface IMenu {
-    icon: JSX.Element;
-    key: string;
-    title: string;
+  icon: JSX.Element;
+  key: string;
+  title: string;
 }
 
 export const menuList: IMenu[] = [

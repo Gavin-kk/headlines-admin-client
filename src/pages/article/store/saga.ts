@@ -1,6 +1,4 @@
-import {
-  ForkEffect, takeEvery, put, select,
-} from 'redux-saga/effects';
+import { ForkEffect, takeEvery, put, select } from 'redux-saga/effects';
 import { DeleteArticlesAction, GetArticleListAction } from '@pages/article/types/action.type';
 import { IResponse } from '@src/services/types/response.interface';
 import { AxiosResponse } from 'axios';
@@ -11,7 +9,7 @@ import { ActionType } from './constant';
 import { IArticleInfo, IChannel } from '../types/response.interface';
 import { changeArticleListAction, changeChannelListAction, getArticleListAction } from './actions';
 
-function* getArticlesList(action:GetArticleListAction) {
+function* getArticlesList(action: GetArticleListAction) {
   try {
     const result: AxiosResponse<IResponse<IArticleInfo>> = yield getArticleListRequest(action.data);
     yield put(changeArticleListAction(result.data.data));
@@ -22,16 +20,16 @@ function* getArticlesList(action:GetArticleListAction) {
 
 function* getChannelList() {
   try {
-    const result:AxiosResponse<IResponse<IChannel[]>> = yield getChannelListRequest();
+    const result: AxiosResponse<IResponse<IChannel[]>> = yield getChannelListRequest();
     yield put(changeChannelListAction(result.data.data));
   } catch (err) {
     yield message.error(err.response.data.message);
   }
 }
 
-function* deleteArticles(action:DeleteArticlesAction) {
+function* deleteArticles(action: DeleteArticlesAction) {
   const { id } = action.data;
-  const { article }:IRootReducer = yield select((state:IRootReducer) => state);
+  const { article }: IRootReducer = yield select((state: IRootReducer) => state);
   const { articleListLoad } = article;
   try {
     yield deleteArticleRequest(id);

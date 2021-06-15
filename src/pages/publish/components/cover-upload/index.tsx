@@ -1,7 +1,5 @@
 import React, { memo, FC, useState } from 'react';
-import {
-  Image, message, Upload,
-} from 'antd';
+import { Image, message, Upload } from 'antd';
 import { UploadChangeParam, UploadFile } from 'antd/lib/upload/interface';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { BASE_URL } from '@services/config';
@@ -9,12 +7,12 @@ import { IResponse } from '@services/types/response.interface';
 import { CoverUploadWrapper } from './style';
 
 interface IProps {
-  onChange: (value:string)=>void;
+  onChange: (value: string) => void;
   disabled: boolean;
   imageUrl: string;
 }
 
-function beforeUpload(file:File) {
+function beforeUpload(file: File) {
   const limit = file.type.indexOf('image') === -1;
   if (limit) {
     message.error('仅可上传图片文件');
@@ -32,7 +30,7 @@ const CoverUpload: FC<IProps> = ({ onChange, imageUrl, disabled }) => {
       <div style={{ marginTop: 8 }}>Upload</div>
     </div>
   );
-  const handleChange = (info :UploadChangeParam<UploadFile<IResponse<string[]>>>) => {
+  const handleChange = (info: UploadChangeParam<UploadFile<IResponse<string[]>>>) => {
     if (info.file.status === 'uploading') {
       setLoading(true);
     }
@@ -56,7 +54,6 @@ const CoverUpload: FC<IProps> = ({ onChange, imageUrl, disabled }) => {
         {imageUrl ? <Image src={imageUrl} alt="cover" /> : uploadButton}
       </Upload>
     </CoverUploadWrapper>
-
   );
 };
 

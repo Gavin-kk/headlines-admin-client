@@ -1,4 +1,4 @@
-export const momentConfig:any = {
+export const momentConfig: any = {
   months: '一月_二月_三月_四月_五月_六月_七月_八月_九月_十月_十一月_十二月'.split('_'),
   monthsShort: '1月_2月_3月_4月_5月_6月_7月_8月_9月_10月_11月_12月'.split('_'),
   weekdays: '星期日_星期一_星期二_星期三_星期四_星期五_星期六'.split('_'),
@@ -17,30 +17,34 @@ export const momentConfig:any = {
     llll: 'YYYY年M月D日dddd HH:mm',
   },
   meridiemParse: /凌晨|早上|上午|中午|下午|晚上/,
-  meridiemHour(hour:any, meridiem:any) {
+  meridiemHour(hour: any, meridiem: any) {
     if (hour === 12) {
       hour = 0;
     }
-    if (meridiem === '凌晨' || meridiem === '早上'
-            || meridiem === '上午') {
+    if (meridiem === '凌晨' || meridiem === '早上' || meridiem === '上午') {
       return hour;
-    } if (meridiem === '下午' || meridiem === '晚上') {
+    }
+    if (meridiem === '下午' || meridiem === '晚上') {
       return hour + 12;
     }
     // '中午'
     return hour >= 11 ? hour : hour + 12;
   },
-  meridiem(hour:any, minute:any) {
+  meridiem(hour: any, minute: any) {
     const hm = hour * 100 + minute;
     if (hm < 600) {
       return '凌晨';
-    } if (hm < 900) {
+    }
+    if (hm < 900) {
       return '早上';
-    } if (hm < 1130) {
+    }
+    if (hm < 1130) {
       return '上午';
-    } if (hm < 1230) {
+    }
+    if (hm < 1230) {
       return '中午';
-    } if (hm < 1800) {
+    }
+    if (hm < 1800) {
       return '下午';
     }
     return '晚上';
@@ -54,7 +58,7 @@ export const momentConfig:any = {
     sameElse: 'L',
   },
   dayOfMonthOrdinalParse: /\d{1,2}(日|月|周)/,
-  ordinal(number:any, period:any) {
+  ordinal(number: any, period: any) {
     switch (period) {
       case 'd':
       case 'D':

@@ -1,6 +1,4 @@
-import React, {
-  FC, ReactElement, memo, useEffect, useState,
-} from 'react';
+import React, { FC, ReactElement, memo, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Spin } from 'antd';
@@ -17,7 +15,7 @@ const Weather: FC = (): ReactElement => {
   const [weatherIcon, setWeatherIcon] = useState<SkyconsType>(SkyconsType.CLEAR_DAY);
   const [color, setColor] = useState<string>('rgb(255,180,38)');
 
-  const { weatherInfo } = useSelector((state:IRootReducer) => ({
+  const { weatherInfo } = useSelector((state: IRootReducer) => ({
     weatherInfo: state.weather.weatherInfo,
   }));
 
@@ -54,8 +52,8 @@ const Weather: FC = (): ReactElement => {
     }
   }, [weatherInfo]);
 
-  const city:string | undefined = weatherInfo?.city;
-  const dayTemperature:number | undefined = weatherInfo?.forecasts[0].dayTemp;
+  const city: string | undefined = weatherInfo?.city;
+  const dayTemperature: number | undefined = weatherInfo?.forecasts[0].dayTemp;
   const nightTemperature: number | undefined = weatherInfo?.forecasts[0].nightTemp;
   const dayWeather: string | undefined = weatherInfo?.forecasts[0].dayWeather;
   const nightWeather: string | undefined = weatherInfo?.forecasts[0].nightWeather;
@@ -64,25 +62,10 @@ const Weather: FC = (): ReactElement => {
     <Spin size="small" spinning={whetherLoading}>
       <WeatherWrapper>
         <span className="city">{city || '北京'}</span>
-        <Skycons
-          color={color}
-          type={weatherIcon}
-          animate
-          size={24}
-          resizeClear
-          className="weather"
-        />
-        <span className="nightTemperature">
-          {nightTemperature || 0}
-          ℃
-        </span>
-        <span className="gap">
-          -
-        </span>
-        <span className="dayTemperature">
-          {dayTemperature || 0}
-          ℃
-        </span>
+        <Skycons color={color} type={weatherIcon} animate size={24} resizeClear className="weather" />
+        <span className="nightTemperature">{`${nightTemperature} ℃` || '0 ℃'}</span>
+        <span className="gap">-</span>
+        <span className="dayTemperature">{`${dayTemperature} ℃` || '0 ℃'}</span>
         <span className="weather">
           <em> 白天天气：</em>
           {dayWeather}
@@ -93,7 +76,6 @@ const Weather: FC = (): ReactElement => {
         </span>
       </WeatherWrapper>
     </Spin>
-
   );
 };
 

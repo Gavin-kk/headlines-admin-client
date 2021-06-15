@@ -1,7 +1,5 @@
 import React, { memo, FC } from 'react';
 
-const Material: FC = () => (
-  <div />
-);
+const Material: FC = () => <div />;
 
 export default memo(Material);

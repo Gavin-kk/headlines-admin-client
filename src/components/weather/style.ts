@@ -6,7 +6,7 @@ export const WeatherWrapper = styled.div`
   height: 100%;
   //width: 200px;
   margin-left: 5px;
-  
+
   span {
     height: 100%;
     line-height: 50px;
@@ -23,23 +23,23 @@ export const WeatherWrapper = styled.div`
   .city {
     white-space: nowrap;
     overflow: hidden;
-    text-overflow:ellipsis;
+    text-overflow: ellipsis;
     padding: 0 10px;
     text-align: center;
     line-height: 50px;
   }
-  
+
   .weather {
     margin-right: 8px;
   }
-  
-  .dayTemperature, .nightTemperature {
-    //width: 32px;
+
+  .dayTemperature,
+  .nightTemperature {
     margin: 0;
     padding: 0;
-    height: 100%  ;
+    height: 100%;
   }
-  
+
   .gap {
     width: 10px;
   }

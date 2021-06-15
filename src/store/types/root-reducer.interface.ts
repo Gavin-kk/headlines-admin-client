@@ -9,5 +9,5 @@ export interface IRootReducer {
     weather: IWeatherState;
     admin: IAdminState;
     article: IArticleState;
-    publish: IPublishState
+    publish: IPublishState;
 }

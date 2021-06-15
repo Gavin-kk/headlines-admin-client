@@ -5,11 +5,11 @@ import { ActionType } from './constant';
 import { ReducerActionType } from '../types/action.type';
 import { IWeatherState } from '../types/state.interface';
 
-const defaultData:IWeatherState = {
+const defaultData: IWeatherState = {
   weatherInfo: null,
 };
 
-function reducer(state = defaultData, action:ReducerActionType):IWeatherState {
+function reducer(state = defaultData, action: ReducerActionType): IWeatherState {
   return produce(state, (draftState: WritableDraft<IWeatherState>) => {
     switch (action.type) {
       case ActionType.CHANGE_WEATHER_INFO:
@@ -20,5 +20,4 @@ function reducer(state = defaultData, action:ReducerActionType):IWeatherState {
     }
   });
 }
-
 export default reducer;

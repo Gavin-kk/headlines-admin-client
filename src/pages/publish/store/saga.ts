@@ -10,14 +10,14 @@ import { IChannel } from '../types/response.interface';
 
 function* getChannelList() {
   try {
-    const result:AxiosResponse<IResponse<IChannel[]>> = yield getChannelListRequest();
+    const result: AxiosResponse<IResponse<IChannel[]>> = yield getChannelListRequest();
     yield put(changeChannelListAction(result.data.data));
   } catch (e) {
     yield message.error(e.response.data.message);
   }
 }
 
-function* submitArticle(action:SubmitArticleAction) {
+function* submitArticle(action: SubmitArticleAction) {
   const { data } = action;
   try {
     yield submitArticleRequest(data);

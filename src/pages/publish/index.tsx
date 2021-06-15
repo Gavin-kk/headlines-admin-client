@@ -1,10 +1,6 @@
-import React, {
-  memo, FC, useState, useCallback, useEffect, useRef,
-} from 'react';
+import React, { memo, FC, useState, useCallback, useEffect, useRef } from 'react';
 import Bread from '@components/bread';
-import {
-  Button, Card, Form, Input, notification, Select,
-} from 'antd';
+import { Button, Card, Form, Input, notification, Select } from 'antd';
 import { ArgsProps } from 'antd/lib/notification';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { RuleObject } from 'rc-field-form/lib/interface';
@@ -30,10 +26,13 @@ const tailLayout = {
 const { Option } = Select;
 
 const Publish: FC = () => {
-  const { channelList, submissionStatus } = useSelector((state:IRootReducer) => ({
-    channelList: state.publish.channelList,
-    submissionStatus: state.publish.submissionStatus,
-  }), shallowEqual);
+  const { channelList, submissionStatus } = useSelector(
+    (state: IRootReducer) => ({
+      channelList: state.publish.channelList,
+      submissionStatus: state.publish.submissionStatus,
+    }),
+    shallowEqual,
+  );
 
   const [richBraftEditorHtml, setRichBraftEditorHtml] = useState<string | null>(null);
   const [imageUrl, setImgUrl] = useState<string>('');
@@ -62,21 +61,24 @@ const Publish: FC = () => {
     const args: ArgsProps = {
       message: '温馨提示',
       description:
-          '请注意 **内容** 区域上传视频文件 仅支持.h264视频编码 AAC音频编码 格式的mp4视频文件, 否则不能保证可以正常预览或播放',
+        '请注意 **内容** 区域上传视频文件 仅支持.h264视频编码 AAC音频编码 格式的mp4视频文件, 否则不能保证可以正常预览或播放',
       duration: 0,
     };
     notification.warn(args);
   }, []);
 
-  const onFinish = useCallback((values: { title: string; channel: number }) => {
-    const submit: ISubmit = {
-      ...values,
-      content: richBraftEditorHtml,
-      cover: imageUrl,
-      status,
-    };
-    dispatch(submitArticleAction(submit));
-  }, [status, imageUrl, richBraftEditorHtml]);
+  const onFinish = useCallback(
+    (values: { title: string; channel: number }) => {
+      const submit: ISubmit = {
+        ...values,
+        content: richBraftEditorHtml,
+        cover: imageUrl,
+        status,
+      };
+      dispatch(submitArticleAction(submit));
+    },
+    [status, imageUrl, richBraftEditorHtml],
+  );
 
   // 存为草稿
   const draft = useCallback(() => {
@@ -84,11 +86,11 @@ const Publish: FC = () => {
     form.submit();
   }, []);
 
-  const richBraftEditorChange = useCallback((html:string) => {
+  const richBraftEditorChange = useCallback((html: string) => {
     setRichBraftEditorHtml(html);
   }, []);
 
-  const titleCheck = useCallback(async (rule:RuleObject, value:string) => {
+  const titleCheck = useCallback(async (rule: RuleObject, value: string) => {
     if (!value) {
       await Promise.reject(new Error('标题不可为空'));
     }
@@ -98,47 +100,29 @@ const Publish: FC = () => {
     await Promise.resolve();
   }, []);
 
-  const coverUploadImg = useCallback((imgUrl:string) => {
+  const coverUploadImg = useCallback((imgUrl: string) => {
     setImgUrl(imgUrl);
     setDisabled(true);
   }, []);
-
   return (
     <Card title={<Bread />}>
-      <Form
-        {...layout}
-        name="basic"
-        onFinish={onFinish}
-        form={form}
-      >
-        <Form.Item
-          label="标题"
-          name="title"
-          rules={[{ required: true, message: '' }, { validator: titleCheck }]}
-        >
+      <Form {...layout} name="basic" onFinish={onFinish} form={form}>
+        <Form.Item label="标题" name="title" rules={[{ required: true, message: '' }, { validator: titleCheck }]}>
           <Input />
         </Form.Item>
-        <Form.Item
-          label="内容"
-        >
+        <Form.Item label="内容">
           <RichBraftEditor onChange={richBraftEditorChange} value={richBraftEditorHtml} ref={richTextEditorRef} />
         </Form.Item>
-        <Form.Item
-          label="封面"
-        >
+        <Form.Item label="封面">
           <CoverUpload onChange={coverUploadImg} imageUrl={imageUrl} disabled={disabled} />
         </Form.Item>
-        <Form.Item
-          label="频道"
-          name="channel"
-          rules={[{ required: true, message: '频道不可为空' }]}
-        >
-          <Select
-            style={{ width: 200 }}
-            placeholder="请选择频道"
-            allowClear
-          >
-            { channelList?.map((item) => <Option key={item.id} value={item.id}>{item.name}</Option>) }
+        <Form.Item label="频道" name="channel" rules={[{ required: true, message: '频道不可为空' }]}>
+          <Select style={{ width: 200 }} placeholder="请选择频道" allowClear>
+            {channelList?.map((item) => (
+              <Option key={item.id} value={item.id}>
+                {item.name}
+              </Option>
+            ))}
           </Select>
         </Form.Item>
 

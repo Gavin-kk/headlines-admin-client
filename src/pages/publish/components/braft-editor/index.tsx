@@ -1,6 +1,4 @@
-import React, {
-  memo, FC, forwardRef,
-} from 'react';
+import React, { memo, FC, forwardRef } from 'react';
 import { AxiosResponse } from 'axios';
 import { IResponse } from '@services/types/response.interface';
 // 引入编辑器组件
@@ -12,18 +10,19 @@ import { Params, uploadFn } from '../types/request.interface';
 
 interface IProps {
   value: string | null;
-  onChange: (value:string)=>void;
-  ref:any
+  onChange: (value: string) => void;
+  ref: any;
 }
 
 // eslint-disable-next-line react/display-name
 const RichBraftEditor: FC<IProps> = forwardRef(({ onChange, value }, ref: any) => {
-  const handleEditorChange = (editorState:EditorState) => {
+  const handleEditorChange = (editorState: EditorState) => {
     onChange(editorState.toHTML());
   };
+
   // ref(())
   // 文章内容文件上传
-  const uploadFn:uploadFn = async (param: Params) => {
+  const uploadFn: uploadFn = async (param: Params) => {
     const data: FormData = new FormData();
     data.append('files', param.file);
     try {

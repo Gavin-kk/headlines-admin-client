@@ -1,6 +1,4 @@
-import {
-  ForkEffect, takeEvery, put, select,
-} from 'redux-saga/effects';
+import { ForkEffect, takeEvery, put, select } from 'redux-saga/effects';
 import { ActionType } from '@pages/login/store/constant';
 import { AxiosResponse } from 'axios';
 import { IResponse } from '@services/types/response.interface';
@@ -11,12 +9,10 @@ import { IRootReducer } from '@src/store/types/root-reducer.interface';
 import { TOKEN_KEY } from '@src/common/constant/constant';
 import { ReducerActionType } from '../types/action.type';
 import { IAuth } from '../types/response.interface';
-import {
-  changeAuthDataAction, changeLoginBtnLoadingAction, changeLoginStatusAction, getState,
-} from './actions';
+import { changeAuthDataAction, changeLoginBtnLoadingAction, changeLoginStatusAction, getState } from './actions';
 
 function* sendLoginRequest(action: ReducerActionType) {
-  const state:IRootReducer = yield select(getState);
+  const state: IRootReducer = yield select(getState);
   try {
     const result: AxiosResponse<IResponse<IAuth>> = yield loginRequest(action.data as IValues);
     yield put(changeLoginStatusAction(true));

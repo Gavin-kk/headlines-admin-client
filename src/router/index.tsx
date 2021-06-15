@@ -16,8 +16,8 @@ export const routers: RouteConfig[] = [
   {
     path: '/',
     exact: true,
-    render():ReactElement {
-      return (<Redirect to="/login" />);
+    render(): ReactElement {
+      return <Redirect to="/login" />;
     },
   },
   {
@@ -31,8 +31,8 @@ export const routers: RouteConfig[] = [
       {
         path: '/',
         exact: true,
-        render():ReactElement {
-          return (<Redirect to="/home" />);
+        render(): ReactElement {
+          return <Redirect to="/home" />;
         },
       },
       {

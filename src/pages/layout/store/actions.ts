@@ -12,7 +12,7 @@ export const getUserInfoAction: GetUserInfoAction = {
 };
 
 // 更改用户信息
-export const changeUserInfoAction = (data:IUserInfo): ChangeUserInfoAction => ({
+export const changeUserInfoAction = (data: IUserInfo): ChangeUserInfoAction => ({
   type: ActionType.CHANGE_USER_INFO,
   data,
 });

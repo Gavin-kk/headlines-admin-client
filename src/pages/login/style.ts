@@ -13,49 +13,47 @@ export const Video = styled.video`
 `;
 
 export const LoginWrapper = styled.div`
-
   .login-enter {
-    opacity:0;
+    opacity: 0;
   }
-  
-  .login-enter-active{
-    opacity:1;
-    transition:all 2s;
+
+  .login-enter-active {
+    opacity: 1;
+    transition: all 2s;
   }
 
   .login-enter-done {
     opacity: 1;
-    transition:all 2s;
+    transition: all 2s;
   }
 
-
-  >.dialog {
+  > .dialog {
     position: absolute;
     left: 50%;
     top: 50%;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
     z-index: 2;
     width: 400px;
     height: 370px;
     background: white;
     border-radius: 10px;
     box-shadow: 0 0 25px 20px rgb(0 0 0 / 30%);
-    
+
     .login-form {
       display: flex;
       justify-content: center;
       align-items: center;
       margin-top: 10px;
-      
+
       .form {
         width: 350px;
-        
+
         .login-form-button {
           width: 100%;
         }
       }
     }
-    
+
     .logo {
       display: flex;
       justify-content: center;

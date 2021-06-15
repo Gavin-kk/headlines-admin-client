@@ -1,6 +1,4 @@
-import {
-  ForkEffect, takeEvery, put,
-} from 'redux-saga/effects';
+import { ForkEffect, takeEvery, put } from 'redux-saga/effects';
 import { ActionType } from '@pages/layout/store/constant';
 import { AxiosResponse } from 'axios';
 import { IResponse } from '@services/types/response.interface';

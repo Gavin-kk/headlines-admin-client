@@ -1,6 +1,4 @@
-import React, {
-  memo, FC, useEffect, useState, useCallback, Suspense,
-} from 'react';
+import React, { memo, FC, useEffect, useState, useCallback, Suspense } from 'react';
 import { Layout } from 'antd';
 import Sider from 'antd/lib/layout/Sider';
 import { Content, Footer, Header } from 'antd/lib/layout/layout';
@@ -18,15 +16,15 @@ import MHeader from './components/header';
 import { LayoutWrapper, LeftNavBarWrapper } from './style';
 import { getUserInfoAction } from './store/actions';
 
-type IProps = RouteConfigComponentProps
+type IProps = RouteConfigComponentProps;
 
-const Admin: FC<IProps> = ({
-  route,
-  history,
-}) => {
-  const { isLogin } = useSelector((state:IRootReducer) => ({
-    isLogin: state.auth.whetherToLogIn,
-  }), shallowEqual);
+const Admin: FC<IProps> = ({ route, history }) => {
+  const { isLogin } = useSelector(
+    (state: IRootReducer) => ({
+      isLogin: state.auth.whetherToLogIn,
+    }),
+    shallowEqual,
+  );
   // 侧边导航是否折叠
   const [collapsed, setCollapsed] = useState<boolean>(true);
 
@@ -34,7 +32,7 @@ const Admin: FC<IProps> = ({
   const location = useLocation();
 
   useEffect(() => {
-    const token:string | null = window.localStorage.getItem(TOKEN_KEY);
+    const token: string | null = window.localStorage.getItem(TOKEN_KEY);
     if (token) {
       // 获取用户信息
       dispatch(getUserInfoAction);
@@ -61,9 +59,13 @@ const Admin: FC<IProps> = ({
         >
           <LeftNavBarWrapper>
             <NavLink to="/home" className="text">
-              {
-                !collapsed ? <span>头条内容发布系统</span> : <div className="img-box"><img src={logo} alt="logo" /></div>
-              }
+              {!collapsed ? (
+                <span>头条内容发布系统</span>
+              ) : (
+                <div className="img-box">
+                  <img src={logo} alt="logo" />
+                </div>
+              )}
             </NavLink>
           </LeftNavBarWrapper>
           {/* 菜单 */}
@@ -76,15 +78,12 @@ const Admin: FC<IProps> = ({
           </Header>
           <Content style={{ padding: '20px 50px 0 50px' }}>
             {/* 渲染路由 */}
-            <Suspense fallback={<Loading />}>
-              {renderRoutes(route?.routes)}
-            </Suspense>
+            <Suspense fallback={<Loading />}>{renderRoutes(route?.routes)}</Suspense>
           </Content>
           <Footer>Footer</Footer>
         </Layout>
       </Layout>
     </LayoutWrapper>
-
   );
 };
 

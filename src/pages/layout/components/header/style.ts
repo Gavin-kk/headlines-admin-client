@@ -6,7 +6,7 @@ export const HeaderWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  
+
   .header-right-box {
     width: 100px;
     height: 100%;
@@ -15,9 +15,9 @@ export const HeaderWrapper = styled.div`
     align-items: center;
     cursor: pointer;
     margin-right: 50px;
-    
+
     img {
-      width:40px;
+      width: 40px;
       height: 40px;
       border-radius: 50%;
     }
@@ -28,7 +28,6 @@ export const HeaderWrapper = styled.div`
       margin: 2px 10px 0 3px;
     }
   }
-  
 `;
 
 export const ContentWrapper = styled.div`

@@ -1,6 +1,6 @@
 import { ArticleStatus } from '../table';
 
-export const stateConfig: { value:string, key:ArticleStatus | string}[] = [
+export const stateConfig: { value: string; key: ArticleStatus | string }[] = [
   {
     value: '全部',
     key: 'all',

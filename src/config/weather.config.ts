@@ -1,11 +1,12 @@
 import { SkyconsType } from 'react-skycons';
 
 type IWeatherIconType = {
-    title: string,
-    type: SkyconsType,
-  color:string
-}
-export const weatherIconArr:IWeatherIconType[] = [
+  title: string;
+  type: SkyconsType;
+  color: string;
+};
+
+export const weatherIconArr: IWeatherIconType[] = [
   {
     title: '晴',
     type: SkyconsType.CLEAR_DAY,

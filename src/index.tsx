@@ -11,12 +11,10 @@ import { momentConfig } from './config/moment.config';
 moment.locale('zh-cn', momentConfig);
 
 ReactDOM.render(
-  (
-    <Provider store={store}>
-      <ConfigProvider locale={zhCN}>
-        <App />
-      </ConfigProvider>
-    </Provider>
-  ),
+  <Provider store={store}>
+    <ConfigProvider locale={zhCN}>
+      <App />
+    </ConfigProvider>
+  </Provider>,
   document.getElementById('root'),
 );

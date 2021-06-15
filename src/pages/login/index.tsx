@@ -1,13 +1,13 @@
-import React, {
-  memo, FC, useEffect, Dispatch, useState,
-} from 'react';
-import {
-  Button, Checkbox, Form, Input,
-} from 'antd';
+import React, { memo, FC, useEffect, Dispatch, useState } from 'react';
+import { Button, Checkbox, Form, Input } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import logo from '@assets/img/logo.svg';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
-import { changeLoginBtnLoadingAction, changeWhetherRememberAction, sendLoginRequestAction } from '@pages/login/store/actions';
+import {
+  changeLoginBtnLoadingAction,
+  changeWhetherRememberAction,
+  sendLoginRequestAction,
+} from '@pages/login/store/actions';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { IRootReducer } from '@src/store/types/root-reducer.interface';
 import { TOKEN_KEY } from '@common/constant/constant';
@@ -18,12 +18,12 @@ import { ReducerActionType } from './types/action.type';
 import { LoginWrapper, Video } from './style';
 
 export interface IValues {
-  username:string;
-  password:string;
-  remember:boolean;
+  username: string;
+  password: string;
+  remember: boolean;
 }
 
-const verifyEmail = (rule: any, value:string) => {
+const verifyEmail = (rule: any, value: string) => {
   const emailReg = /^[^_$].{4,}@(163|126|qq|sina)\.(com|cn|net)$/;
   if (!value) {
     return Promise.reject(new Error('邮箱不可为空'));
@@ -34,20 +34,24 @@ const verifyEmail = (rule: any, value:string) => {
   return Promise.resolve();
 };
 
-const verifyPassword = (rule:any, value:string) => {
+const verifyPassword = (rule: any, value: string) => {
   if (!value) {
     return Promise.reject(new Error('密码不可为空'));
-  } if (value.length < 5) {
+  }
+  if (value.length < 5) {
     return Promise.reject(new Error('密码长度不足'));
   }
   return Promise.resolve();
 };
 
 const Login: FC = () => {
-  const { whetherToLogIn, isLoading } = useSelector((state:IRootReducer) => ({
-    whetherToLogIn: state.auth.whetherToLogIn,
-    isLoading: state.auth.loading,
-  }), shallowEqual);
+  const { whetherToLogIn, isLoading } = useSelector(
+    (state: IRootReducer) => ({
+      whetherToLogIn: state.auth.whetherToLogIn,
+      isLoading: state.auth.loading,
+    }),
+    shallowEqual,
+  );
 
   const dispatch = useDispatch<Dispatch<ReducerActionType>>();
   const history = useHistory();
@@ -81,7 +85,7 @@ const Login: FC = () => {
     dispatch(sendLoginRequestAction(values));
   };
 
-  const checkboxChange = (event:CheckboxChangeEvent) => {
+  const checkboxChange = (event: CheckboxChangeEvent) => {
     dispatch(changeWhetherRememberAction(event.target.checked));
   };
 
@@ -94,12 +98,7 @@ const Login: FC = () => {
     <>
       <Video src="http://localhost:5000/static/welcome-video.mp4" autoPlay muted loop />
       <LoginWrapper>
-
-        <CSSTransition
-          in={flag}
-          timeout={2000}
-          classNames="login"
-        >
+        <CSSTransition in={flag} timeout={2000} classNames="login">
           <div className="dialog">
             <div className="logo">
               <img src={logo} alt="logo" />
@@ -113,16 +112,10 @@ const Login: FC = () => {
                 onFinishFailed={onFinishFailed}
                 form={form}
               >
-                <Form.Item
-                  name="username"
-                  rules={[{ required: true, message: '' }, { validator: verifyEmail }]}
-                >
+                <Form.Item name="username" rules={[{ required: true, message: '' }, { validator: verifyEmail }]}>
                   <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="请输入邮箱" />
                 </Form.Item>
-                <Form.Item
-                  name="password"
-                  rules={[{ required: true, message: '' }, { validator: verifyPassword }]}
-                >
+                <Form.Item name="password" rules={[{ required: true, message: '' }, { validator: verifyPassword }]}>
                   <Input
                     prefix={<LockOutlined className="site-form-item-icon" />}
                     type="password"
@@ -136,12 +129,7 @@ const Login: FC = () => {
                 </Form.Item>
 
                 <Form.Item>
-                  <Button
-                    type="primary"
-                    loading={isLoading}
-                    htmlType="submit"
-                    className="login-form-button"
-                  >
+                  <Button type="primary" loading={isLoading} htmlType="submit" className="login-form-button">
                     登录
                   </Button>
                 </Form.Item>
@@ -151,7 +139,6 @@ const Login: FC = () => {
         </CSSTransition>
       </LoginWrapper>
     </>
-
   );
 };
 
