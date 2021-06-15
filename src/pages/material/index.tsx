@@ -1,10 +1,6 @@
 import React, { memo, FC } from 'react';
 
-interface IProps {
-
-}
-
-const Material: FC<IProps> = ({}) => (
+const Material: FC = () => (
   <div />
 );
 

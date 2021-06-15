@@ -1,49 +1,33 @@
 import React, {
-  memo, FC, useState, useEffect,
+  memo, FC, forwardRef,
 } from 'react';
-import request from '@services/request';
 import { AxiosResponse } from 'axios';
 import { IResponse } from '@services/types/response.interface';
-
 // 引入编辑器组件
 import BraftEditor, { EditorState } from 'braft-editor';
 // 引入编辑器样式
 import 'braft-editor/dist/index.css';
-import { message } from 'antd';
 import { fileUpload } from '@services/publish.request';
 import { Params, uploadFn } from '../types/request.interface';
 
 interface IProps {
-  value: string;
+  value: string | null;
   onChange: (value:string)=>void;
+  ref:any
 }
 
-const RichBraftEditor: FC<IProps> = ({ onChange, value }) => {
-  // const [imgUrls, setImgUrls] = useState<string[]>([]);
+// eslint-disable-next-line react/display-name
+const RichBraftEditor: FC<IProps> = forwardRef(({ onChange, value }, ref: any) => {
   const handleEditorChange = (editorState:EditorState) => {
     onChange(editorState.toHTML());
   };
-
+  // ref(())
   // 文章内容文件上传
   const uploadFn:uploadFn = async (param: Params) => {
     const data: FormData = new FormData();
-    // if (param.file.type.indexOf('image') === -1) {
-    //   message.error('仅可上传图片');
-    //   param.error({ msg: '仅可上传图片' });
-    //   return;
-    // }
     data.append('files', param.file);
     try {
       const result: AxiosResponse<IResponse<string[]>> = await fileUpload(data);
-
-      // setImgUrls((value: string[]) => {
-      //   const newImgUrls: string[] = [...value];
-      //   result.data.data.forEach((item) => {
-      //     newImgUrls.push(item);
-      //   });
-      //   return newImgUrls;
-      // });
-
       param.success({
         url: result.data.data[0],
         meta: {
@@ -63,6 +47,9 @@ const RichBraftEditor: FC<IProps> = ({ onChange, value }) => {
 
   return (
     <BraftEditor
+      ref={(instance) => {
+        ref.current = instance;
+      }}
       style={{ border: '1px solid #ccc' }}
       value={value}
       onChange={handleEditorChange}
@@ -71,6 +58,6 @@ const RichBraftEditor: FC<IProps> = ({ onChange, value }) => {
       }}
     />
   );
-};
+});
 
 export default memo(RichBraftEditor);

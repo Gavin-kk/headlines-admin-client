@@ -1,15 +1,13 @@
 import {
-  Table, Image, Button, Tag, Spin, Popconfirm,
+  Table, Image, Button, Tag, Popconfirm,
 } from 'antd';
 import React, {
-  memo, FC, useEffect, useMemo, useCallback, Fragment, Suspense, useState,
+  memo, FC, useEffect, useMemo, useCallback, Fragment, useState,
 } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { IRootReducer } from '@src/store/types/root-reducer.interface';
 import moment from 'moment';
 import { faultToleranceImg } from '@src/assets/img/base64/fault-tolerance.img';
-import Loading from '@components/loading';
-import { Content } from 'antd/lib/layout/layout';
 import { TableWrapper } from './style';
 import { getArticleListAction, deleteArticlesAction } from '../../store/actions';
 import { IList } from '../../types/response.interface';

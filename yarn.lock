@@ -9784,6 +9784,15 @@ rc-dropdown@^3.2.0, rc-dropdown@~3.2.0:
     classnames "^2.2.6"
     rc-trigger "^5.0.4"
 
+rc-field-form@^1.21.0-2:
+  version "1.21.0-2"
+  resolved "https://registry.nlark.com/rc-field-form/download/rc-field-form-1.21.0-2.tgz#93ef4956b7dc280fb4dff4c990be11b973af3393"
+  integrity sha1-k+9JVrfcKA+03/TJkL4RuXOvM5M=
+  dependencies:
+    "@babel/runtime" "^7.8.4"
+    async-validator "^3.0.3"
+    rc-util "^5.8.0"
+
 rc-field-form@~1.20.0:
   version "1.20.1"
   resolved "https://registry.nlark.com/rc-field-form/download/rc-field-form-1.20.1.tgz#d1c51888107cf075b42704b7b575bef84c359291"

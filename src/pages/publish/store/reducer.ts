@@ -6,6 +6,7 @@ import { IPublishState } from '../types/state.interface';
 
 const defaultData:IPublishState = {
   channelList: [],
+  submissionStatus: false,
 };
 
 function reducer(state = defaultData, action:ReducerActionType):IPublishState {
@@ -13,6 +14,9 @@ function reducer(state = defaultData, action:ReducerActionType):IPublishState {
     switch (action.type) {
       case ActionType.CHANGE_CHANNEL_LIST:
         draft.channelList = action.data;
+        return draft;
+      case ActionType.CHANGE_WHETHER_SUCCEED:
+        draft.submissionStatus = action.data;
         return draft;
       default:
         return draft;

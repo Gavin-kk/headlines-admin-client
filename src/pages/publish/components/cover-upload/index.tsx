@@ -1,6 +1,6 @@
 import React, { memo, FC, useState } from 'react';
 import {
-  Form, Image, message, Upload,
+  Image, message, Upload,
 } from 'antd';
 import { UploadChangeParam, UploadFile } from 'antd/lib/upload/interface';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
@@ -9,8 +9,11 @@ import { IResponse } from '@services/types/response.interface';
 import { CoverUploadWrapper } from './style';
 
 interface IProps {
-
+  onChange: (value:string)=>void;
+  disabled: boolean;
+  imageUrl: string;
 }
+
 function beforeUpload(file:File) {
   const limit = file.type.indexOf('image') === -1;
   if (limit) {
@@ -21,10 +24,8 @@ function beforeUpload(file:File) {
   return !limit && isLt2M;
 }
 
-const CoverUpload: FC<IProps> = ({}) => {
+const CoverUpload: FC<IProps> = ({ onChange, imageUrl, disabled }) => {
   const [loading, setLoading] = useState<boolean>(false);
-  const [imageUrl, setImgUrl] = useState<string>('');
-  const [disabled, setDisabled] = useState<boolean>(false);
   const uploadButton = (
     <div>
       {loading ? <LoadingOutlined /> : <PlusOutlined />}
@@ -37,8 +38,7 @@ const CoverUpload: FC<IProps> = ({}) => {
     }
     if (info.file.status === 'done' && info.file.response?.data) {
       setLoading(false);
-      setImgUrl(info.file.response?.data[0]);
-      setDisabled(true);
+      onChange(info.file.response?.data[0]);
     }
   };
   return (

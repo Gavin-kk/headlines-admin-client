@@ -5,7 +5,6 @@ import Weather from '@components/weather';
 import { Popconfirm, Popover } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import { NavLink } from 'react-router-dom';
-import { TOKEN_KEY } from '@common/constant/constant';
 import { useHistory } from 'react-router';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { IRootReducer } from '@src/store/types/root-reducer.interface';
