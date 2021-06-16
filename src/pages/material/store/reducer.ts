@@ -6,6 +6,7 @@ import { IMaterialState } from '../types/state.interface';
 
 const defaultState: IMaterialState = {
   materialList: null,
+  likeList: null,
 };
 
 function reducer(state = defaultState, action: ReducerActionType): IMaterialState {
@@ -13,6 +14,9 @@ function reducer(state = defaultState, action: ReducerActionType): IMaterialStat
     switch (action.type) {
       case ActionType.CHANGE_MATERIAL_LIST:
         draft.materialList = action.data.list;
+        return draft;
+      case ActionType.CHANGE_LIKE_LIST:
+        draft.likeList = action.data.list;
         return draft;
       default:
         return draft;

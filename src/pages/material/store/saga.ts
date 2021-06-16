@@ -11,7 +11,12 @@ import { IMaterial } from '@pages/material/types/response.interface';
 import { message } from 'antd';
 import { ActionType } from '../store/constant';
 import { DeleteMaterialAction, LikeMaterialAction, UnlikeMaterialAction } from '../types/action.type';
-import { changeMaterialListAction } from './actions';
+import {
+  changeLikeListAction,
+  changeMaterialListAction,
+  getAllTheMaterialsAction,
+  getAllTheMaterialsYouLikeAction,
+} from './actions';
 
 function* getAllTheMaterials() {
   try {
@@ -24,7 +29,7 @@ function* getAllTheMaterials() {
 function* getAllTheMaterialsYouLike() {
   try {
     const result: AxiosResponse<IResponse<IMaterial[]>> = yield getLikeMaterialRequest();
-    yield put(changeMaterialListAction(result.data.data));
+    yield put(changeLikeListAction(result.data.data));
   } catch (err) {
     yield message.error(err.response.data.message);
   }
@@ -40,8 +45,10 @@ function* deleteMaterial(action: DeleteMaterialAction) {
 
 function* likeMaterial(action: LikeMaterialAction) {
   try {
-    yield likeMaterialRequest(action.data.id);
-    yield message.success('添加成功');
+    const result: AxiosResponse<IResponse<string>> = yield likeMaterialRequest(action.data.id);
+    yield put(getAllTheMaterialsAction);
+    yield put(getAllTheMaterialsYouLikeAction);
+    yield message.success(result.data.data);
   } catch (err) {
     yield message.error(err.response.data.message);
   }
@@ -49,6 +56,7 @@ function* likeMaterial(action: LikeMaterialAction) {
 function* unlikeMaterial(action: UnlikeMaterialAction) {
   try {
     yield likeMaterialRequest(action.data.id);
+    yield put(getAllTheMaterialsYouLikeAction);
     yield message.success('取消喜欢成功');
   } catch (err) {
     yield message.error(err.response.data.message);

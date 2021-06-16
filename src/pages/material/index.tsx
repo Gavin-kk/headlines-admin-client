@@ -1,14 +1,13 @@
-import React, { memo, FC, useEffect, useState, useCallback } from 'react';
-import { Button, Card, Tabs, Image, Spin, message, notification } from 'antd';
+import React, { memo, FC, useEffect, useCallback } from 'react';
+import { Button, Card, Tabs } from 'antd';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { Dispatch } from 'redux';
-import fault from '@assets/img/fault-tolerant.png';
 import Bread from '../../components/bread';
 import { ReducerActionType } from './types/action.type';
-import { getAllTheMaterialsAction, getAllTheMaterialsYouLikeAction } from './store/actions';
+import { getAllTheMaterialsAction, getAllTheMaterialsYouLikeAction, likeMaterialAction } from './store/actions';
 import { IRootReducer } from '../../store/types/root-reducer.interface';
 import { MaterialWrapper } from './style';
-import Loading from '../../components/loading';
+import MImage from './components/image';
 
 enum Tab {
   LIKE = '0',
@@ -17,17 +16,15 @@ enum Tab {
 
 const { TabPane } = Tabs;
 const Material: FC = () => {
-  const { materialList } = useSelector(
+  const { materialList, likeList } = useSelector(
     (state: IRootReducer) => ({
       materialList: state.material.materialList,
+      likeList: state.material.likeList,
     }),
     shallowEqual,
   );
 
   const dispatch: Dispatch<ReducerActionType> = useDispatch<Dispatch<ReducerActionType>>();
-  const [current, setCurrent] = useState<string>(Tab.ALL);
-  const [align, setAlignment] = useState<boolean>(true);
-  const [whetherToPreviewIndex, setWhetherToPreviewIndex] = useState<number | null>(null);
 
   useEffect(() => {
     const args = {
@@ -35,60 +32,52 @@ const Material: FC = () => {
       description: '双击图片启动图片预览',
       duration: 0,
     };
-    notification.warn(args);
+    // notification.warn(args);
     // 获取全部素材
     dispatch(getAllTheMaterialsAction);
+    // 获取喜欢的素材
+    dispatch(getAllTheMaterialsYouLikeAction);
   }, []);
 
-  useEffect(() => {
-    if (materialList && materialList.length % 9 !== 0) {
-      setAlignment(false);
-    }
-  }, [materialList]);
+  const likeClickEvent = useCallback((id: number) => {
+    dispatch(likeMaterialAction(id));
+    console.log('like', id);
 
-  const tabChange = (key: string) => {
-    if (key === Tab.ALL) {
-      dispatch(getAllTheMaterialsAction);
-    } else {
-      dispatch(getAllTheMaterialsYouLikeAction);
-    }
-    setCurrent(key);
-  };
-
-  const pictureDoubleClickEvent = useCallback((index: number) => {
-    setWhetherToPreviewIndex(index);
+    //
   }, []);
-
+  const deleteClickEvent = useCallback((id: number) => {
+    dispatch(likeMaterialAction(id));
+    console.log('del', id);
+    //
+  }, []);
   return (
-    <MaterialWrapper justifyContent={align}>
+    <MaterialWrapper>
       <Card title={<Bread />} extra={<Button type="primary">添加素材</Button>}>
-        <Tabs activeKey={current} tabPosition="left" onChange={tabChange}>
+        <Tabs tabPosition="left">
           <TabPane tab="全部素材" key={Tab.ALL}>
             <div className="img-box">
-              {materialList?.map((item, index) => (
-                <Image
+              {materialList?.map((item) => (
+                <MImage
                   key={item.id}
-                  src={item.matter}
-                  width={150}
-                  preview={index === whetherToPreviewIndex}
-                  onDoubleClick={() => pictureDoubleClickEvent(index)}
-                  fallback={fault}
-                  placeholder={<Loading />}
+                  data={item}
+                  srcIndex="matter"
+                  likeClickEvent={likeClickEvent}
+                  deleteClickEvent={deleteClickEvent}
+                  id={item.id}
                 />
               ))}
             </div>
           </TabPane>
           <TabPane tab="我喜欢的" key={Tab.LIKE}>
             <div className="img-box">
-              {materialList?.map((item, index) => (
-                <Image
+              {likeList?.map((item) => (
+                <MImage
                   key={item.id}
-                  src={item.matter}
-                  width={150}
-                  preview={index === whetherToPreviewIndex}
-                  onDoubleClick={() => pictureDoubleClickEvent(index)}
-                  fallback={fault}
-                  placeholder={<div>loading</div>}
+                  data={item}
+                  srcIndex="matter"
+                  likeClickEvent={likeClickEvent}
+                  deleteClickEvent={deleteClickEvent}
+                  id={item.id}
                 />
               ))}
             </div>

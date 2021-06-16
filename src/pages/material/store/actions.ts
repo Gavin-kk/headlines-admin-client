@@ -1,4 +1,5 @@
 import {
+  ChangeLikeListAction,
   ChangeMaterialListAction,
   DeleteMaterialAction,
   GetAllTheMaterialsAction,
@@ -37,6 +38,12 @@ export const likeMaterialAction = (id: number): LikeMaterialAction => ({
   type: ActionType.LIKE_MATERIAL,
   data: {
     id,
+  },
+});
+export const changeLikeListAction = (list: IMaterial[]): ChangeLikeListAction => ({
+  type: ActionType.CHANGE_LIKE_LIST,
+  data: {
+    list,
   },
 });
 // 取消喜欢素材

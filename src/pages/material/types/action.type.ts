@@ -8,6 +8,7 @@ export type DeleteMaterialAction = IActionType<ActionType.DELETE_MATERIAL, { id:
 export type LikeMaterialAction = IActionType<ActionType.LIKE_MATERIAL, { id: number }>;
 export type UnlikeMaterialAction = IActionType<ActionType.UNLIKE_MATERIAL, { id: number }>;
 export type ChangeMaterialListAction = IActionType<ActionType.CHANGE_MATERIAL_LIST, { list: IMaterial[] }>;
+export type ChangeLikeListAction = IActionType<ActionType.CHANGE_LIKE_LIST, { list: IMaterial[] }>;
 
 export type ReducerActionType =
   | GetAllTheMaterialsAction
@@ -15,4 +16,5 @@ export type ReducerActionType =
   | DeleteMaterialAction
   | LikeMaterialAction
   | UnlikeMaterialAction
-  | ChangeMaterialListAction;
+  | ChangeMaterialListAction
+  | ChangeLikeListAction;

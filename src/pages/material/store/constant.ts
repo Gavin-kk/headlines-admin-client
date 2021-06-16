@@ -5,4 +5,5 @@ export enum ActionType {
   DELETE_MATERIAL = 'delete_material',
   LIKE_MATERIAL = 'like_material',
   UNLIKE_MATERIAL = 'unlike_material',
+  CHANGE_LIKE_LIST = 'change_like_list',
 }
