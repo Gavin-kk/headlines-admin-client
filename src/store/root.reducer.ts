@@ -4,6 +4,7 @@ import { reducer as weatherReducer } from '@components/weather/store';
 import { reducer as adminReducer } from '@pages/layout/store';
 import { reducer as articleReducer } from '@pages/article/store';
 import { reducer as publishReducer } from '@pages/publish/store';
+import { reducer as materialReducer } from '@pages/material/store';
 
 const reducer = combineReducers({
   auth: loginReducer,
@@ -11,5 +12,6 @@ const reducer = combineReducers({
   admin: adminReducer,
   article: articleReducer,
   publish: publishReducer,
+  material: materialReducer,
 });
 export default reducer;

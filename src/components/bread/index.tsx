@@ -1,11 +1,14 @@
 import { Breadcrumb } from 'antd';
 import React, { memo, FC, useMemo } from 'react';
-import { menuList } from '@src/config/menu.config';
+import { IMenu, menuList } from '@src/config/menu.config';
 import { NavLink, useLocation } from 'react-router-dom';
 
-const Bread: FC = () => {
+interface IProps {
+  child?: JSX.Element;
+}
+const Bread: FC<IProps> = ({ child }) => {
   const location = useLocation();
-  const handleBread = useMemo(
+  const handleBread: IMenu | undefined = useMemo(
     () => menuList.find((item) => item.key.indexOf(location.pathname) !== -1),
     [location.pathname],
   );
@@ -19,6 +22,7 @@ const Bread: FC = () => {
           <NavLink to={handleBread.key}>{handleBread?.title}</NavLink>
         </Breadcrumb.Item>
       )}
+      {child && <Breadcrumb.Item>{child}</Breadcrumb.Item>}
     </Breadcrumb>
   );
 };

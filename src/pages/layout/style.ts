@@ -18,6 +18,9 @@ export const LayoutWrapper = styled.div`
     overflow-y: auto;
     background: ${leftMenuColor} !important;
   }
+  #layout-left.layout-left::-webkit-scrollbar {
+    width: 0;
+  }
 
   .ant-layout-sider-trigger {
     width: 100%;

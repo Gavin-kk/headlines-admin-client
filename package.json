@@ -3,12 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@types/braft-editor": "^2.2.0",
-    "@types/json-bigint": "^1.0.0",
     "ahooks": "^2.10.5",
     "antd": "^4.16.2",
     "axios": "^0.21.1",
     "braft-editor": "^2.3.9",
+    "classnames": "^2.3.1",
     "craco": "^0.0.3",
     "craco-alias": "^3.0.1",
     "craco-antd": "^1.19.0",
@@ -35,6 +34,9 @@
     "web-vitals": "^1.0.1"
   },
   "devDependencies": {
+    "@types/braft-editor": "^2.2.0",
+    "@types/classnames": "^2.3.1",
+    "@types/json-bigint": "^1.0.0",
     "@ant-design/icons": "^4.6.2",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
@@ -90,9 +92,10 @@
       "last 1 safari version"
     ]
   },
-  "prettier":{
+  "prettier": {
     "singleQuote": true,
     "trailingComma": "all",
-    "printWidth": 120
+    "printWidth": 120,
+    "endOfLine": "auto"
   }
 }

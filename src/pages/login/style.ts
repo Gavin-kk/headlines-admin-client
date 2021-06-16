@@ -13,6 +13,10 @@ export const Video = styled.video`
 `;
 
 export const LoginWrapper = styled.div`
+  .show {
+    display: none;
+  }
+
   .login-enter {
     opacity: 0;
   }
@@ -27,7 +31,7 @@ export const LoginWrapper = styled.div`
     transition: all 2s;
   }
 
-  > .dialog {
+  .dialog {
     position: absolute;
     left: 50%;
     top: 50%;
@@ -63,4 +67,77 @@ export const LoginWrapper = styled.div`
       margin: 0 auto;
     }
   }
+`;
+
+export const LoginBtnWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+
+  .hide {
+    display: none;
+  }
+
+  .box {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 4;
+    transform: translate(-50%, -50%);
+
+    img {
+      display: block;
+      width: 761px;
+      height: 64px;
+    }
+
+    .btn-box {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+
+      > .btn {
+        display: inline-block;
+        width: 82px;
+        height: 36px;
+        line-height: 36px;
+        text-align: center;
+        color: white;
+        transition: all 0.3s;
+        border-radius: 8px;
+        margin: 20px 20px;
+      }
+
+      .login-btn {
+        cursor: pointer;
+        background: rgb(240, 65, 66);
+        border: 1px solid rgb(240, 65, 66);
+
+        &:hover {
+          transition: all 0.3s;
+          background: rgb(255, 133, 133);
+          border: 1px solid rgb(255, 133, 133);
+        }
+      }
+
+      .register-btn {
+        background: rgba(255, 255, 255, 0);
+        border: 1px solid #fff;
+
+        .ant-btn {
+          border: none;
+          background: rgba(255, 255, 255, 0);
+          color: white;
+        }
+      }
+    }
+  }
+`;
+
+export const RegisterBtnWrapper = styled.div`
+  position: relative;
+  z-index: 4;
+  width: 82px;
+  height: 36px;
+  background: rgb(240, 65, 66);
+  color: white;
 `;
