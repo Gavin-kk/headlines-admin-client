@@ -1,5 +1,5 @@
-import React, { memo, FC, useEffect, useCallback, useState } from 'react';
-import { Button, Card, Pagination, Tabs } from 'antd';
+import React, { memo, FC, useEffect, useCallback } from 'react';
+import { Card, Pagination, Tabs } from 'antd';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { Dispatch } from 'redux';
 import Bread from '../../components/bread';
@@ -44,12 +44,16 @@ const Material: FC = () => {
     dispatch(getAllTheMaterialsYouLikeAction(likePage.pageNum, likePage.pageSize));
   }, []);
 
+  // 图片的喜欢点击事件
   const likeClickEvent = useCallback((id: number) => {
     dispatch(likeMaterialAction(id));
   }, []);
+  // 图片的删除点击事件
   const deleteClickEvent = useCallback((id: number) => {
     dispatch(deleteMaterialAction(id, 'show'));
   }, []);
+
+  // 分页处理
   const paginationChange = useCallback((pageNum: number, pageSize?: number, isLike?: boolean) => {
     if (isLike) {
       dispatch(changeLikePageAction(pageSize || 32, pageNum));

@@ -7,12 +7,25 @@ import { UploadRequestOption as RcCustomRequestOptions } from 'rc-upload/lib/int
 import { uploadMaterialReuqest } from '@src/services/material.request';
 import { AxiosResponse } from 'axios';
 import { IResponse } from '@services/types/response.interface';
-import { deleteMaterialAction } from '@pages/material/store/actions';
-import { useDispatch } from 'react-redux';
+import {
+  deleteMaterialAction,
+  getAllTheMaterialsAction,
+  getAllTheMaterialsYouLikeAction,
+} from '@pages/material/store/actions';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { Dispatch } from 'redux';
 import { ReducerActionType } from '@pages/material/types/action.type';
+import { IRootReducer } from '@src/store/types/root-reducer.interface';
 
 const AddMaterial: FC = () => {
+  const { page, likePage } = useSelector(
+    (state: IRootReducer) => ({
+      page: state.material.page,
+      likePage: state.material.likePage,
+    }),
+    shallowEqual,
+  );
+
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [previewVisible, setPreviewVisible] = useState<boolean>(false);
   const [previewImage, setPreviewImage] = useState<string>('');
@@ -84,6 +97,14 @@ const AddMaterial: FC = () => {
 
   const handleOk = useCallback(() => {
     //    点击ok
+    // 获取第一页素材
+    dispatch(getAllTheMaterialsAction(page.pageNum, page.pageSize));
+    // 获取喜欢的素材
+    dispatch(getAllTheMaterialsYouLikeAction(likePage.pageNum, likePage.pageSize));
+    // 关闭对话框
+    setIsModalVisible(false);
+    // 清空列表
+    setFileList([]);
   }, []);
   const handleCancel = useCallback(() => {
     // 把所有已经上传 但是取消上传的图片删除
