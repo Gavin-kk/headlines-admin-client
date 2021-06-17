@@ -13,16 +13,20 @@ export const MaterialWrapper = styled.div`
       width: 150px;
       height: 150px;
       object-fit: fill;
-      vertical-align: top;
-
+      vertical-align: bottom;
+      overflow: hidden;
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
       .ant-image-mask {
-        height: 146px;
+        height: 150px;
       }
     }
   }
 
   .pagination-like {
     margin-top: 15px;
-    //padding: 0 10px;
   }
 `;

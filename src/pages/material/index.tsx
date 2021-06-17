@@ -15,6 +15,7 @@ import {
 import { IRootReducer } from '../../store/types/root-reducer.interface';
 import { MaterialWrapper } from './style';
 import MImage from './components/image';
+import AddMaterial from './components/add-material';
 
 enum Tab {
   LIKE = '0',
@@ -47,9 +48,9 @@ const Material: FC = () => {
     dispatch(likeMaterialAction(id));
   }, []);
   const deleteClickEvent = useCallback((id: number) => {
-    dispatch(deleteMaterialAction(id));
+    dispatch(deleteMaterialAction(id, 'show'));
   }, []);
-  const paginationChange = (pageNum: number, pageSize?: number, isLike?: boolean) => {
+  const paginationChange = useCallback((pageNum: number, pageSize?: number, isLike?: boolean) => {
     if (isLike) {
       dispatch(changeLikePageAction(pageSize || 32, pageNum));
       dispatch(getAllTheMaterialsYouLikeAction(pageNum, pageSize || 32));
@@ -57,11 +58,11 @@ const Material: FC = () => {
       dispatch(changePageAction(pageSize || 32, pageNum));
       dispatch(getAllTheMaterialsAction(pageNum, pageSize || 32));
     }
-  };
+  }, []);
 
   return (
     <MaterialWrapper>
-      <Card title={<Bread />} extra={<Button type="primary">添加素材</Button>}>
+      <Card title={<Bread />} extra={<AddMaterial />}>
         <Tabs tabPosition="left">
           <TabPane tab="全部素材" key={Tab.ALL}>
             <div className="img-box">

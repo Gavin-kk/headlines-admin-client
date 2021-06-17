@@ -37,11 +37,12 @@ export const changeMaterialListAction = (list: IList[]): ChangeMaterialListActio
     list,
   },
 });
-// 删除素材
-export const deleteMaterialAction = (id: number): DeleteMaterialAction => ({
+// 删除素材 auto 代表不会弹出删除成功的提示 show 是弹出
+export const deleteMaterialAction = (id: number, type: 'auto' | 'show'): DeleteMaterialAction => ({
   type: ActionType.DELETE_MATERIAL,
   data: {
     id,
+    type,
   },
 });
 // 喜欢素材

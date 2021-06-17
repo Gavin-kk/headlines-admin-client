@@ -10,6 +10,7 @@ interface IProps {
   onChange: (value: string) => void;
   disabled: boolean;
   imageUrl: string;
+  action?: string;
 }
 
 function beforeUpload(file: File) {
@@ -22,7 +23,7 @@ function beforeUpload(file: File) {
   return !limit && isLt2M;
 }
 
-const CoverUpload: FC<IProps> = ({ onChange, imageUrl, disabled }) => {
+const CoverUpload: FC<IProps> = ({ onChange, imageUrl, disabled, action }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const uploadButton = (
     <div>
@@ -46,7 +47,7 @@ const CoverUpload: FC<IProps> = ({ onChange, imageUrl, disabled }) => {
         listType="picture-card"
         className="avatar-uploader"
         showUploadList={false}
-        action={`${BASE_URL}/article/upload/file`}
+        action={action || `${BASE_URL}/article/upload/file`}
         beforeUpload={beforeUpload}
         onChange={handleChange}
         disabled={disabled}

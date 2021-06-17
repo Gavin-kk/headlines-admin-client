@@ -27,3 +27,7 @@ export const unlikeMaterialRequest = (id: number): Promise<AxiosResponse> =>
   });
 // 喜欢素材
 export const likeMaterialRequest = (id: number): Promise<AxiosResponse> => request.post('/material/like', { id });
+
+// 上传素材
+export const uploadMaterialReuqest = (data: FormData): Promise<AxiosResponse> =>
+  request.post('/material/upload/file', data);

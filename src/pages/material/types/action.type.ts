@@ -10,7 +10,7 @@ export type GetAllTheMaterialsYouLikeAction = IActionType<
   ActionType.GET_ALL_THE_MATERIALS_YOU_LIKE,
   { pageNum: number; pageSize: number }
 >;
-export type DeleteMaterialAction = IActionType<ActionType.DELETE_MATERIAL, { id: number }>;
+export type DeleteMaterialAction = IActionType<ActionType.DELETE_MATERIAL, { id: number; type: 'auto' | 'show' }>;
 export type LikeMaterialAction = IActionType<ActionType.LIKE_MATERIAL, { id: number }>;
 export type ChangeMaterialListAction = IActionType<ActionType.CHANGE_MATERIAL_LIST, { list: IList[] }>;
 export type ChangeLikeListAction = IActionType<ActionType.CHANGE_LIKE_LIST, { list: IList[] }>;

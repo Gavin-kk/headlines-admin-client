@@ -103,6 +103,9 @@
         "implicit-arrow-linebreak": 0,
         "react/jsx-wrap-multilines": 0,
         "quotes": 0,
-        "operator-linebreak": 0
+        "operator-linebreak": 0,
+        "comma-spacing": 1,
+        "no-unneeded-ternary": 1,
+        "space-infix-ops": 1
     }
 }

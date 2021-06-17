@@ -5,10 +5,12 @@ export const MImageWrapper = styled.div`
     position: relative;
     padding: 10px;
     border: 1px solid #ccc;
+    overflow: hidden;
+
     .operation-bar {
       transition: all 0.3s;
       position: absolute;
-      bottom: 15px;
+      bottom: 11px;
       left: 50%;
       transform: translateX(-50%);
       width: 150px;

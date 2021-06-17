@@ -9,7 +9,7 @@ import { Dispatch } from 'redux';
 import { useForm } from 'antd/lib/form/Form';
 import BraftEditor from 'braft-editor';
 import RichBraftEditor from './components/braft-editor';
-import CoverUpload from './components/cover-upload';
+import CoverUpload from '../../components/cover-upload';
 import { changeSubmissionStatusAction, getChannelListAction, submitArticleAction } from './store/actions';
 import { IRootReducer } from '../../store/types/root-reducer.interface';
 import { ReducerActionType } from './types/action.type';

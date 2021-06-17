@@ -50,14 +50,17 @@ function* getAllTheMaterialsYouLike(action: GetAllTheMaterialsYouLikeAction) {
   }
 }
 function* deleteMaterial(action: DeleteMaterialAction) {
+  const { id, type } = action.data;
   const {
     material: { page, likePage },
   }: IRootReducer = yield select((state: IRootReducer) => state);
   try {
-    const result: AxiosResponse<IResponse<string>> = yield deleteMaterialRequest(action.data.id);
-    yield put(getAllTheMaterialsAction(page.pageNum, page.pageSize));
-    yield put(getAllTheMaterialsYouLikeAction(likePage.pageNum, likePage.pageSize));
-    yield message.success(result.data.data);
+    const result: AxiosResponse<IResponse<string>> = yield deleteMaterialRequest(id);
+    if (type !== 'auto') {
+      yield put(getAllTheMaterialsAction(page.pageNum, page.pageSize));
+      yield put(getAllTheMaterialsYouLikeAction(likePage.pageNum, likePage.pageSize));
+      yield message.success(result.data.data);
+    }
   } catch (err) {
     yield message.error(err.response.data.message);
   }
