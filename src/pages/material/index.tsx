@@ -1,4 +1,4 @@
-import React, { memo, FC, useEffect, useCallback } from 'react';
+import React, { memo, FC, useEffect, useCallback, useMemo, useState } from 'react';
 import { Card, Pagination, Tabs } from 'antd';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { Dispatch } from 'redux';
@@ -34,6 +34,9 @@ const Material: FC = () => {
     }),
     shallowEqual,
   );
+  // 给分页设置一个动态默认值 防止闪烁
+  const [defaultPage, setDefaultPage] = useState<number>(30);
+  const [defaultLikePage, setDefaultLikePage] = useState<number>(30);
 
   const dispatch: Dispatch<ReducerActionType> = useDispatch<Dispatch<ReducerActionType>>();
 
@@ -43,6 +46,18 @@ const Material: FC = () => {
     // 获取喜欢的素材
     dispatch(getAllTheMaterialsYouLikeAction(likePage.pageNum, likePage.pageSize));
   }, []);
+
+  useEffect(() => {
+    if (page.total) {
+      setDefaultPage(page.total);
+    }
+  }, [page, likePage]);
+
+  useEffect(() => {
+    if (likePage.total) {
+      setDefaultLikePage(likePage.total);
+    }
+  }, [likePage]);
 
   // 图片的喜欢点击事件
   const likeClickEvent = useCallback((id: number) => {
@@ -54,64 +69,74 @@ const Material: FC = () => {
   }, []);
 
   // 分页处理
-  const paginationChange = useCallback((pageNum: number, pageSize?: number, isLike?: boolean) => {
-    if (isLike) {
-      dispatch(changeLikePageAction(pageSize || 32, pageNum));
-      dispatch(getAllTheMaterialsYouLikeAction(pageNum, pageSize || 32));
-    } else {
-      dispatch(changePageAction(pageSize || 32, pageNum));
-      dispatch(getAllTheMaterialsAction(pageNum, pageSize || 32));
-    }
-  }, []);
+  const paginationChange = useCallback(
+    (pageNum: number, pageSize?: number, isLike?: boolean) => {
+      if (isLike) {
+        dispatch(changeLikePageAction(pageSize || 32, pageNum, defaultLikePage));
+        dispatch(getAllTheMaterialsYouLikeAction(pageNum, pageSize || defaultLikePage));
+      } else {
+        dispatch(changePageAction(pageSize || 32, pageNum, defaultPage));
+        dispatch(getAllTheMaterialsAction(pageNum, pageSize || 32));
+      }
+    },
+    [defaultPage, defaultLikePage],
+  );
 
+  const handleAllImgRender = useMemo(
+    () =>
+      materialList?.map((item) => (
+        <MImage
+          key={item.id}
+          data={item}
+          srcIndex="matter"
+          likeClickEvent={likeClickEvent}
+          deleteClickEvent={deleteClickEvent}
+          id={item.id}
+        />
+      )),
+    [materialList],
+  );
+
+  const handleLikeImgRender = useMemo(
+    () =>
+      likeList?.map((item) => (
+        <MImage
+          key={item.id}
+          data={item}
+          srcIndex="matter"
+          likeClickEvent={likeClickEvent}
+          deleteClickEvent={deleteClickEvent}
+          id={item.id}
+        />
+      )),
+    [likeList],
+  );
+
+  const handlePagination = useCallback(
+    (p: { pageSize: number; pageNum: number; total?: number }, isLike: boolean) => (
+      <Pagination
+        className="pagination-like"
+        showSizeChanger={false}
+        current={p.pageNum}
+        pageSize={p.pageSize}
+        onChange={(pageNum: number, pageSize?: number) => paginationChange(pageNum, pageSize, isLike)}
+        total={p.total || defaultPage}
+      />
+    ),
+    [defaultPage, paginationChange],
+  );
   return (
     <MaterialWrapper>
       <Card title={<Bread />} extra={<AddMaterial />}>
         <Tabs tabPosition="left">
           <TabPane tab="全部素材" key={Tab.ALL}>
-            <div className="img-box">
-              {materialList?.map((item) => (
-                <MImage
-                  key={item.id}
-                  data={item}
-                  srcIndex="matter"
-                  likeClickEvent={likeClickEvent}
-                  deleteClickEvent={deleteClickEvent}
-                  id={item.id}
-                />
-              ))}
-            </div>
-            <Pagination
-              className="pagination-like"
-              showSizeChanger={false}
-              current={page.pageNum}
-              pageSize={page.pageSize}
-              onChange={(pageNum: number, pageSize?: number) => paginationChange(pageNum, pageSize, false)}
-              total={page.total}
-            />
+            <div className="img-box">{handleAllImgRender}</div>
+            {handlePagination(page, false)}
           </TabPane>
 
           <TabPane tab="我喜欢的" key={Tab.LIKE}>
-            <div className="img-box">
-              {likeList?.map((item) => (
-                <MImage
-                  key={item.id}
-                  data={item}
-                  srcIndex="matter"
-                  likeClickEvent={likeClickEvent}
-                  deleteClickEvent={deleteClickEvent}
-                  id={item.id}
-                />
-              ))}
-            </div>
-            <Pagination
-              className="pagination-like"
-              showSizeChanger={false}
-              current={likePage.pageNum}
-              pageSize={likePage.pageSize}
-              onChange={(pageNum: number, pageSize?: number) => paginationChange(pageNum, pageSize, true)}
-              total={likePage.total}
-            />
+            <div className="img-box">{handleLikeImgRender}</div>
+            {handlePagination(page, true)}
           </TabPane>
         </Tabs>
       </Card>

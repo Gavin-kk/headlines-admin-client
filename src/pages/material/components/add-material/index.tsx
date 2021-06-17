@@ -97,15 +97,15 @@ const AddMaterial: FC = () => {
 
   const handleOk = useCallback(() => {
     //    点击ok
-    // 获取第一页素材
-    dispatch(getAllTheMaterialsAction(page.pageNum, page.pageSize));
-    // 获取喜欢的素材
-    dispatch(getAllTheMaterialsYouLikeAction(likePage.pageNum, likePage.pageSize));
+    if (page.pageNum === 1) {
+      // 获取第一页素材
+      dispatch(getAllTheMaterialsAction(page.pageNum, page.pageSize));
+    }
     // 关闭对话框
     setIsModalVisible(false);
     // 清空列表
     setFileList([]);
-  }, []);
+  }, [page, likePage]);
   const handleCancel = useCallback(() => {
     // 把所有已经上传 但是取消上传的图片删除
     fileList.forEach((item) => {
