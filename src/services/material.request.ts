@@ -1,9 +1,21 @@
 import { AxiosResponse } from 'axios';
 import request from './request';
 // 获取全部素材
-export const getAllMaterialRequest = (): Promise<AxiosResponse> => request.get('/material');
+export const getAllMaterialRequest = (pageNum: number, pageSize: number): Promise<AxiosResponse> =>
+  request.get('/material', {
+    params: {
+      pageNum,
+      pageSize,
+    },
+  });
 // 获取个人喜欢的所有素材
-export const getLikeMaterialRequest = (): Promise<AxiosResponse> => request.get('/material/like/all');
+export const getLikeMaterialRequest = (pageNum: number, pageSize: number): Promise<AxiosResponse> =>
+  request.get('/material/like/all', {
+    params: {
+      pageNum,
+      pageSize,
+    },
+  });
 // 删除素材
 export const deleteMaterialRequest = (id: number): Promise<AxiosResponse> => request.delete(`/material/${id}`);
 // 取消喜欢素材

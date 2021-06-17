@@ -1,26 +1,37 @@
 import {
   ChangeLikeListAction,
+  ChangeLikePageAction,
   ChangeMaterialListAction,
+  ChangePageAction,
   DeleteMaterialAction,
   GetAllTheMaterialsAction,
   GetAllTheMaterialsYouLikeAction,
   LikeMaterialAction,
-  UnlikeMaterialAction,
 } from '../types/action.type';
-import { IMaterial } from '../types/response.interface';
+import { IList } from '../types/response.interface';
 import { ActionType } from './constant';
 // 获取全部素材
-export const getAllTheMaterialsAction: GetAllTheMaterialsAction = {
+export const getAllTheMaterialsAction = (pageNum: number, pageSize: number): GetAllTheMaterialsAction => ({
   type: ActionType.GET_ALL_THE_MATERIALS,
-  data: null,
-};
+  data: {
+    pageNum,
+    pageSize,
+  },
+});
+
 // 获取个人喜欢的所有素材
-export const getAllTheMaterialsYouLikeAction: GetAllTheMaterialsYouLikeAction = {
+export const getAllTheMaterialsYouLikeAction = (
+  pageNum: number,
+  pageSize: number,
+): GetAllTheMaterialsYouLikeAction => ({
   type: ActionType.GET_ALL_THE_MATERIALS_YOU_LIKE,
-  data: null,
-};
+  data: {
+    pageNum,
+    pageSize,
+  },
+});
 // 改变素材列表
-export const changeMaterialListAction = (list: IMaterial[]): ChangeMaterialListAction => ({
+export const changeMaterialListAction = (list: IList[]): ChangeMaterialListAction => ({
   type: ActionType.CHANGE_MATERIAL_LIST,
   data: {
     list,
@@ -40,16 +51,29 @@ export const likeMaterialAction = (id: number): LikeMaterialAction => ({
     id,
   },
 });
-export const changeLikeListAction = (list: IMaterial[]): ChangeLikeListAction => ({
+// 更改喜欢列表
+export const changeLikeListAction = (list: IList[]): ChangeLikeListAction => ({
   type: ActionType.CHANGE_LIKE_LIST,
   data: {
     list,
   },
 });
-// 取消喜欢素材
-export const unlikeMaterialAction = (id: number): UnlikeMaterialAction => ({
-  type: ActionType.UNLIKE_MATERIAL,
+
+// 改变页码和每页条数
+export const changePageAction = (pageSize: number, pageNum: number, total?: number): ChangePageAction => ({
+  type: ActionType.CHANGE_PAGE,
   data: {
-    id,
+    pageSize,
+    pageNum,
+    total,
+  },
+});
+// 改变页码和每页条数
+export const changeLikePageAction = (pageSize: number, pageNum: number, total?: number): ChangeLikePageAction => ({
+  type: ActionType.CHANGE_LIKE_PAGE,
+  data: {
+    pageSize,
+    pageNum,
+    total: total || 27,
   },
 });

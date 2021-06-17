@@ -4,6 +4,7 @@ export const MImageWrapper = styled.div`
   .wrapper {
     position: relative;
     padding: 10px;
+    border: 1px solid #ccc;
     .operation-bar {
       transition: all 0.3s;
       position: absolute;
