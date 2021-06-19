@@ -46,7 +46,7 @@ const MHeader: FC = () => {
         <Popover placement="bottom" content={content} trigger="click">
           <div className="header-right-box">
             <img src={userinfo?.avatar} alt="" />
-            <div className="username">{userinfo?.username}</div>
+            <div className="username">{userinfo?.nickname || userinfo?.username}</div>
             <DownOutlined className="user-icon" />
           </div>
         </Popover>

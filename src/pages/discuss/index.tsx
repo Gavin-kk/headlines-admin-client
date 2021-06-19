@@ -1,4 +1,4 @@
-import React, { memo, FC, useEffect, useMemo } from 'react';
+import React, { memo, FC, useEffect, useMemo, useCallback } from 'react';
 import { Button, Card, Table } from 'antd';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { ColumnType } from 'antd/lib/table/interface';
@@ -76,9 +76,9 @@ const Discuss: FC = () => {
     [],
   );
 
-  const paginationChangeEvent = (pageNum: number, pageSize?: number) => {
+  const paginationChangeEvent = useCallback((pageNum: number, pageSize?: number) => {
     dispatch(getArticleListAction({ pageNum, pageSize }));
-  };
+  }, []);
 
   const TableRender = useMemo(
     () => (

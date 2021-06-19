@@ -153,5 +153,4 @@ const MTable: FC = () => {
     </TableWrapper>
   );
 };
-
 export default memo(MTable);

@@ -4,7 +4,16 @@ import { saga as articleSaga } from '@pages/article/store';
 import { saga as publishSaga } from '@pages/publish/store';
 import { saga as materialSaga } from '@pages/material/store';
 import { saga as discussSaga } from '@pages/discuss/store';
+import { saga as personalSaga } from '@pages/personal/store';
 
-const sagaArr: (() => Generator)[] = [loginSaga, adminSaga, articleSaga, publishSaga, materialSaga, discussSaga];
+const sagaArr: (() => Generator)[] = [
+  loginSaga,
+  adminSaga,
+  articleSaga,
+  publishSaga,
+  materialSaga,
+  discussSaga,
+  personalSaga,
+];
 
 export default sagaArr;
