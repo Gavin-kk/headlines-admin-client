@@ -63,16 +63,16 @@ const Weather: FC = (): ReactElement => {
       <WeatherWrapper>
         <span className="city">{city || '北京'}</span>
         <Skycons color={color} type={weatherIcon} animate size={24} resizeClear className="weather" />
-        <span className="nightTemperature">{`${nightTemperature} ℃` || '0 ℃'}</span>
+        <span className="nightTemperature">{`${nightTemperature || 0} ℃` || '0 ℃'}</span>
         <span className="gap">-</span>
-        <span className="dayTemperature">{`${dayTemperature} ℃` || '0 ℃'}</span>
+        <span className="dayTemperature">{`${dayTemperature || 0} ℃` || '0 ℃'}</span>
         <span className="weather">
           <em> 白天天气：</em>
-          {dayWeather}
+          {dayWeather || '晴'}
         </span>
         <span className="weather">
           <em>夜间天气：</em>
-          {nightWeather}
+          {nightWeather || '晴'}
         </span>
       </WeatherWrapper>
     </Spin>

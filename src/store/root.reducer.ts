@@ -5,6 +5,7 @@ import { reducer as adminReducer } from '@pages/layout/store';
 import { reducer as articleReducer } from '@pages/article/store';
 import { reducer as publishReducer } from '@pages/publish/store';
 import { reducer as materialReducer } from '@pages/material/store';
+import { reducer as discussReducer } from '@pages/discuss/store';
 
 const reducer = combineReducers({
   auth: loginReducer,
@@ -13,5 +14,6 @@ const reducer = combineReducers({
   article: articleReducer,
   publish: publishReducer,
   material: materialReducer,
+  discuss: discussReducer,
 });
 export default reducer;

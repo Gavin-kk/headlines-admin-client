@@ -61,9 +61,7 @@ const Login: FC = () => {
   const history = useHistory();
   const [form] = useForm();
 
-  // 以后删除
   useEffect(() => {
-    console.log();
     form.setFieldsValue({
       username: 'admin@qq.com',
       password: 'admin',

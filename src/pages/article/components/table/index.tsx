@@ -141,8 +141,8 @@ const MTable: FC = () => {
         rowKey="id"
         loading={loading}
         pagination={{
-          pageSize: articleInfo?.pageSize ? parseInt(articleInfo?.pageSize, 10) : 10,
-          current: articleInfo?.pageNum ? parseInt(articleInfo?.pageNum, 10) : 1,
+          pageSize: articleInfo?.pageSize || 10,
+          current: articleInfo?.pageNum || 1,
           total: articleInfo?.total,
           showQuickJumper: true,
           onChange: paginationChange,

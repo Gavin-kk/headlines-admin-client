@@ -72,11 +72,11 @@ const Admin: FC<IProps> = ({ route, history }) => {
           <MMenu />
         </Sider>
         <Layout style={{ overflow: 'auto' }}>
-          <Header className="layout-header">
+          <Header className="layout-header" style={{ minWidth: 1250 }}>
             {/* 头部组件 */}
             <MHeader />
           </Header>
-          <Content style={{ padding: '20px 50px 0 50px' }}>
+          <Content style={{ padding: '20px 50px 0 50px', minWidth: 1250 }}>
             {/* 渲染路由 */}
             <Suspense fallback={<Loading />}>{renderRoutes(route?.routes)}</Suspense>
           </Content>

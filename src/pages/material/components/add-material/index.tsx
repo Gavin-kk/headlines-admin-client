@@ -7,11 +7,7 @@ import { UploadRequestOption as RcCustomRequestOptions } from 'rc-upload/lib/int
 import { uploadMaterialReuqest } from '@src/services/material.request';
 import { AxiosResponse } from 'axios';
 import { IResponse } from '@services/types/response.interface';
-import {
-  deleteMaterialAction,
-  getAllTheMaterialsAction,
-  getAllTheMaterialsYouLikeAction,
-} from '@pages/material/store/actions';
+import { deleteMaterialAction, getAllTheMaterialsAction } from '@pages/material/store/actions';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { Dispatch } from 'redux';
 import { ReducerActionType } from '@pages/material/types/action.type';

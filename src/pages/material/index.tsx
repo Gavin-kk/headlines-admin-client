@@ -51,13 +51,10 @@ const Material: FC = () => {
     if (page.total) {
       setDefaultPage(page.total);
     }
-  }, [page, likePage]);
-
-  useEffect(() => {
     if (likePage.total) {
       setDefaultLikePage(likePage.total);
     }
-  }, [likePage]);
+  }, [page, likePage]);
 
   // 图片的喜欢点击事件
   const likeClickEvent = useCallback((id: number) => {
@@ -76,12 +73,12 @@ const Material: FC = () => {
         dispatch(getAllTheMaterialsYouLikeAction(pageNum, pageSize || defaultLikePage));
       } else {
         dispatch(changePageAction(pageSize || 32, pageNum, defaultPage));
-        dispatch(getAllTheMaterialsAction(pageNum, pageSize || 32));
+        dispatch(getAllTheMaterialsAction(pageNum, pageSize || defaultPage));
       }
     },
     [defaultPage, defaultLikePage],
   );
-
+  // 渲染素材组件
   const handleAllImgRender = useMemo(
     () =>
       materialList?.map((item) => (
@@ -96,7 +93,7 @@ const Material: FC = () => {
       )),
     [materialList],
   );
-
+  // 渲染喜欢的素材组件
   const handleLikeImgRender = useMemo(
     () =>
       likeList?.map((item) => (
@@ -113,18 +110,25 @@ const Material: FC = () => {
   );
 
   const handlePagination = useCallback(
-    (p: { pageSize: number; pageNum: number; total?: number }, isLike: boolean) => (
-      <Pagination
-        className="pagination-like"
-        showSizeChanger={false}
-        current={p.pageNum}
-        pageSize={p.pageSize}
-        onChange={(pageNum: number, pageSize?: number) => paginationChange(pageNum, pageSize, isLike)}
-        total={p.total || defaultPage}
-      />
-    ),
+    (p: { pageSize: number; pageNum: number; total?: number }, isLike: boolean) => {
+      // 每页大小
+      const pageSizeGlobal: string[] = ['32', '64', '128', '256'];
+      return (
+        <Pagination
+          className="pagination-like"
+          current={p.pageNum}
+          pageSize={p.pageSize}
+          onChange={(pageNum: number, pageSize?: number) => paginationChange(pageNum, pageSize, isLike)}
+          total={p.total || defaultPage}
+          showSizeChanger
+          pageSizeOptions={pageSizeGlobal}
+          showQuickJumper
+        />
+      );
+    },
     [defaultPage, paginationChange],
   );
+
   return (
     <MaterialWrapper>
       <Card title={<Bread />} extra={<AddMaterial />}>
@@ -136,7 +140,7 @@ const Material: FC = () => {
 
           <TabPane tab="我喜欢的" key={Tab.LIKE}>
             <div className="img-box">{handleLikeImgRender}</div>
-            {handlePagination(page, true)}
+            {handlePagination(likePage, true)}
           </TabPane>
         </Tabs>
       </Card>

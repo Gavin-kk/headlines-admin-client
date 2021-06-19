@@ -4,6 +4,7 @@ import { IAdminState } from '@pages/layout/types/state.interface';
 import { IArticleState } from '@pages/article/types/state.interface';
 import { IPublishState } from '@pages/publish/types/state.interface';
 import { IMaterialState } from '@pages/material/types/state.interface';
+import { IDiscussState } from '@src/pages/discuss/types/state.interface';
 
 export interface IRootReducer {
   auth: LoginStateInterface;
@@ -12,4 +13,5 @@ export interface IRootReducer {
   article: IArticleState;
   publish: IPublishState;
   material: IMaterialState;
+  discuss: IDiscussState;
 }

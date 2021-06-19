@@ -1,5 +1,4 @@
-import React, { memo, FC, useRef } from 'react';
-import { useHover } from 'ahooks';
+import React, { memo, FC } from 'react';
 import { Image, Popconfirm } from 'antd';
 import fault from '@assets/img/fault-tolerant.png';
 import Loading from '@components/loading';

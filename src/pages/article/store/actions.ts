@@ -10,7 +10,6 @@ import {
 import { IGetArticleListLoad } from '../types/request.interface';
 import { IArticleInfo, IChannel } from '../types/response.interface';
 // 获取文章列表
-
 export const getArticleListAction = (ArticleListLoad: IGetArticleListLoad): GetArticleListAction => ({
   type: ActionType.GET_LIST_OF_ARTICLES,
   data: ArticleListLoad,
