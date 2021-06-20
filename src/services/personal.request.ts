@@ -7,3 +7,6 @@ export const getCityListRequest = (id: number): Promise<AxiosResponse> =>
       id,
     },
   });
+
+// 修改头像
+export const editAvatarRequest = (data: FormData): Promise<AxiosResponse> => request.post('/user/avatar', data);

@@ -106,6 +106,9 @@
         "operator-linebreak": 0,
         "comma-spacing": 1,
         "no-unneeded-ternary": 1,
-        "space-infix-ops": 1
+        "space-infix-ops": 1,
+        "no-return-assign": 0,
+        "comma-dangle": 0,
+        "function-paren-newline": 0
     }
 }

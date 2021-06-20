@@ -1,59 +1,37 @@
-import { ForkEffect, takeEvery, put, select } from 'redux-saga/effects';
+import { ForkEffect, takeEvery, put } from 'redux-saga/effects';
 import { ActionType } from '@pages/personal/store/constant';
+import { message } from 'antd';
+import { editAvatarRequest } from '@services/personal.request';
+import { getUserInfoAction } from '@src/pages/layout/store/actions';
+import { EditUserInfoAction, SubmitAvatarAction } from '@pages/personal/types/action.type';
 import { AxiosResponse } from 'axios';
 import { IResponse } from '@services/types/response.interface';
-import { getCityListRequest } from '@services/personal.request';
-import { ICity } from '@pages/personal/types/response.interface';
-import {
-  addCurrentSelectedOptionChildAction,
-  changeCascadeOptionAction,
-  changeCurrentCascadeOptionLoadingAction,
-} from '@pages/personal/store/actions';
-import { message } from 'antd';
-import { CascaderOptionType } from 'antd/lib/cascader';
-import { IRootReducer } from '@src/store/types/root-reducer.interface';
-import { GetListOfCitiesAction } from '../types/action.type';
+import { ISubmitData } from '../types/request.interface';
 
-function* getCtiyList(action: GetListOfCitiesAction) {
-  const { id, cascaderOption } = action.data;
-  const { personal }: IRootReducer = yield select((state: IRootReducer) => state);
-
+function* submitAvatar(action: SubmitAvatarAction) {
+  const imgData: FormData = action.data;
   try {
-    if (!personal.cascaderOption.length) {
-      const result: AxiosResponse<IResponse<ICity[]>> = yield getCityListRequest(id);
-      const cascadeOption: CascaderOptionType[] = handleCascadeOption(result.data.data);
-      yield put(changeCascadeOptionAction(cascadeOption));
-    } else {
-      const index = personal.cascaderOption.findIndex((item) => item.value === id);
-      console.log(index);
-      // console.log(index);
-      yield put(changeCurrentCascadeOptionLoadingAction(index, true));
-      const result: AxiosResponse<IResponse<ICity[]>> = yield getCityListRequest(id);
-      // console.log(result);
-      if (!result.data.data.length) {
-        // yield put();
-      }
-      // console.log(id);
-
-      const cascadeOption: CascaderOptionType[] = handleCascadeOption(result.data.data);
-      yield put(addCurrentSelectedOptionChildAction(cascadeOption, index));
-      yield put(changeCurrentCascadeOptionLoadingAction(index, false));
-    }
+    yield editAvatarRequest(imgData);
+    yield put(getUserInfoAction);
+    yield message.success('修改成功');
   } catch (err) {
-    console.log(err.message);
-    yield message.error('请求城市列表失败');
+    yield message.error(`提交失败: ${err.response.data.message}`);
+  }
+}
+
+function* editUserInfo(action: EditUserInfoAction) {
+  const { data } = action;
+  try {
+    const result: AxiosResponse<IResponse<any>> = yield;
+    console.log(result);
+  } catch (err) {
+    yield message.error(err.response.data.message);
   }
 }
 
 function* saga(): Generator<ForkEffect<never>> {
-  yield takeEvery(ActionType.GET_CITY_LIST, getCtiyList);
+  yield takeEvery(ActionType.SUBMIT_AVATAR, submitAvatar);
+  yield takeEvery(ActionType.EDIT_USER_INFO, editUserInfo);
 }
-// 额外方法
-const handleCascadeOption = (list: ICity[]): CascaderOptionType[] =>
-  list.map((item) => ({
-    value: item.id,
-    label: item.placeName,
-    isLeaf: false,
-  }));
 
 export default saga;
