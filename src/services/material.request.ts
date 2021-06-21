@@ -29,5 +29,5 @@ export const unlikeMaterialRequest = (id: number): Promise<AxiosResponse> =>
 export const likeMaterialRequest = (id: number): Promise<AxiosResponse> => request.post('/material/like', { id });
 
 // 上传素材
-export const uploadMaterialReuqest = (data: FormData): Promise<AxiosResponse> =>
+export const uploadMaterialRequest = (data: FormData): Promise<AxiosResponse> =>
   request.post('/material/upload/file', data);

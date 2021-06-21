@@ -1,6 +1,6 @@
 import React, { memo, FC, useState, useCallback, useEffect, useRef } from 'react';
 import Bread from '@components/bread';
-import { Button, Card, Form, Input, notification, Select } from 'antd';
+import { Button, Card, Form, Input, Modal, notification, Select } from 'antd';
 import { ArgsProps } from 'antd/lib/notification';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { RuleObject } from 'rc-field-form/lib/interface';
@@ -8,12 +8,16 @@ import { ISubmit } from '@src/store/types/request.interface';
 import { Dispatch } from 'redux';
 import { useForm } from 'antd/lib/form/Form';
 import BraftEditor from 'braft-editor';
+import { PlusOutlined } from '@ant-design/icons';
 import RichBraftEditor from './components/braft-editor';
 import CoverUpload from '../../components/cover-upload';
 import { changeSubmissionStatusAction, getChannelListAction, submitArticleAction } from './store/actions';
 import { IRootReducer } from '../../store/types/root-reducer.interface';
 import { ReducerActionType } from './types/action.type';
 import { ArticleStatus } from '../article/components/table';
+import { CoverUploadUploadWrapper } from './style';
+import AddMaterial from '../material/components/add-material';
+import { deleteMaterialRequest, uploadMaterialRequest } from '../../services/material.request';
 
 const layout = {
   labelCol: { span: 2 },
@@ -38,6 +42,8 @@ const Publish: FC = () => {
   const [imageUrl, setImgUrl] = useState<string>('');
   const [status, setStatus] = useState<ArticleStatus>(ArticleStatus.pendingReview);
   const [disabled, setDisabled] = useState<boolean>(false);
+  const [uploadMaterialDialog, setUploadMaterialDialog] = useState<boolean>(false);
+  const [coverImageList, setCoverImageList] = useState<any[]>([]);
 
   const [form] = useForm();
   const dispatch = useDispatch<Dispatch<ReducerActionType>>();
@@ -62,7 +68,7 @@ const Publish: FC = () => {
       message: '温馨提示',
       description:
         '请注意 **内容** 区域上传视频文件 仅支持.h264视频编码 AAC音频编码 格式的mp4视频文件, 否则不能保证可以正常预览或播放',
-      duration: 0,
+      duration: 20,
     };
     notification.warn(args);
   }, []);
@@ -104,6 +110,16 @@ const Publish: FC = () => {
     setImgUrl(imgUrl);
     setDisabled(true);
   }, []);
+
+  // 显示上传素材对话框
+  const uploadDialogShow = () => setUploadMaterialDialog(true);
+  // 关闭上传素材对话框
+  const uploadDialogHide = () => setUploadMaterialDialog(false);
+  // 确定上传使用素材或上传素材
+  const confirmUploadCover = () => {
+    // 在这里发送提交网络请求
+  };
+
   return (
     <Card title={<Bread />}>
       <Form {...layout} name="basic" onFinish={onFinish} form={form}>
@@ -114,7 +130,41 @@ const Publish: FC = () => {
           <RichBraftEditor onChange={richBraftEditorChange} value={richBraftEditorHtml} ref={richTextEditorRef} />
         </Form.Item>
         <Form.Item label="封面">
-          <CoverUpload onChange={coverUploadImg} imageUrl={imageUrl} disabled={disabled} />
+          <CoverUploadUploadWrapper>
+            {!coverImageList.length ? (
+              <div className="cover-upload-btn" onClick={uploadDialogShow}>
+                <PlusOutlined className="up-icon cover-upload" />
+                <span className="cover-upload-title cover-upload">Upload</span>
+              </div>
+            ) : (
+              <div className="cover-upload-box">
+                {coverImageList.map((item) => (
+                  <div key={item} className="cover-upload-img">
+                    <span>item</span>
+                  </div>
+                ))}
+                {/* <div className="cover-upload-img" /> */}
+                {/* <div className="cover-upload-img" /> */}
+              </div>
+            )}
+
+            <Modal
+              title="上传素材"
+              visible={uploadMaterialDialog}
+              onOk={confirmUploadCover}
+              onCancel={uploadDialogHide}
+            >
+              <CoverUpload
+                uploadRequestMethods={uploadMaterialRequest}
+                deleteUploadedPictureRequestMethods={deleteMaterialRequest}
+                name="file"
+                idIndex="id"
+                urlIndex="imgs"
+                deleteUploadedFlag={!uploadMaterialDialog}
+              />
+            </Modal>
+          </CoverUploadUploadWrapper>
+          {/* <CoverUpload onChange={coverUploadImg} imageUrl={imageUrl} disabled={disabled} /> */}
         </Form.Item>
         <Form.Item label="频道" name="channel" rules={[{ required: true, message: '频道不可为空' }]}>
           <Select style={{ width: 200 }} placeholder="请选择频道" allowClear>

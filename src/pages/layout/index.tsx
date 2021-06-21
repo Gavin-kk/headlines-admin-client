@@ -59,13 +59,10 @@ const Admin: FC<IProps> = ({ route, history }) => {
         >
           <LeftNavBarWrapper>
             <NavLink to="/home" className="text">
-              {!collapsed ? (
-                <span>头条内容发布系统</span>
-              ) : (
-                <div className="img-box">
-                  <img src={logo} alt="logo" />
-                </div>
-              )}
+              <span style={{ opacity: !collapsed ? 1 : 0 }}>头条内容发布系统</span>
+              <div className="img-box" style={{ opacity: collapsed ? 1 : 0 }}>
+                <img src={logo} alt="logo" />
+              </div>
             </NavLink>
           </LeftNavBarWrapper>
           {/* 菜单 */}

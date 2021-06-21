@@ -26,7 +26,8 @@ const Weather: FC = (): ReactElement => {
       if (window.BMap) {
         clearInterval(time);
         // 使用地理位置并获取天气信息
-        dispatch(getWeatherInfoAction());
+        console.log();
+        // dispatch(getWeatherInfoAction());
       }
     }, 100);
     return () => {

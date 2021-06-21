@@ -4,7 +4,7 @@ import { BASE_URL } from '@src/services/config';
 import { PlusOutlined } from '@ant-design/icons';
 import { UploadChangeParam, UploadFile } from 'antd/lib/upload/interface';
 import { UploadRequestOption as RcCustomRequestOptions } from 'rc-upload/lib/interface';
-import { uploadMaterialReuqest } from '@src/services/material.request';
+import { uploadMaterialRequest } from '@src/services/material.request';
 import { AxiosResponse } from 'axios';
 import { IResponse } from '@services/types/response.interface';
 import { deleteMaterialAction, getAllTheMaterialsAction } from '@pages/material/store/actions';
@@ -73,7 +73,7 @@ const AddMaterial: FC = () => {
       const fileData = new FormData();
       fileData.append('file', file);
       try {
-        const result: AxiosResponse<IResponse<{ imgs: string; id: number }>> = await uploadMaterialReuqest(fileData);
+        const result: AxiosResponse<IResponse<{ imgs: string; id: number }>> = await uploadMaterialRequest(fileData);
         const imgItemDone: UploadFile = {
           uid: String(result.data.data.id), // 注意，这个uid一定不能少，否则上传失败
           name: result.data.data.imgs,
@@ -102,6 +102,7 @@ const AddMaterial: FC = () => {
     // 清空列表
     setFileList([]);
   }, [page, likePage]);
+
   const handleCancel = useCallback(() => {
     // 把所有已经上传 但是取消上传的图片删除
     fileList.forEach((item) => {
@@ -111,9 +112,11 @@ const AddMaterial: FC = () => {
     setFileList([]);
     setIsModalVisible(false);
   }, [fileList]);
+
   const showModal = useCallback(() => {
     setIsModalVisible(true);
   }, []);
+
   return (
     <>
       <Button type="primary" onClick={showModal}>

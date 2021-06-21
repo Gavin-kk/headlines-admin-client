@@ -8,10 +8,9 @@ export const HeaderWrapper = styled.div`
   align-items: center;
 
   .header-right-box {
-    width: 100px;
     height: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     cursor: pointer;
     margin-right: 50px;
@@ -22,7 +21,7 @@ export const HeaderWrapper = styled.div`
       border-radius: 50%;
     }
     .username {
-      margin-left: 8px;
+      padding: 0 8px;
     }
     .user-icon {
       margin: 2px 10px 0 3px;

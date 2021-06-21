@@ -33,15 +33,15 @@ export const LayoutWrapper = styled.div`
 `;
 
 export const LeftNavBarWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-content: center;
+  position: relative;
   width: 100%;
   height: 96px;
   text-align: center;
-  transition: all 0.2s;
 
   .text > span {
+    position: absolute;
+    left: 0;
+    top: 0;
     width: 100%;
     height: 100%;
     white-space: nowrap;

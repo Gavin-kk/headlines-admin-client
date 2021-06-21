@@ -1,12 +1,9 @@
 import { ForkEffect, takeEvery, put } from 'redux-saga/effects';
 import { ActionType } from '@pages/personal/store/constant';
 import { message } from 'antd';
-import { editAvatarRequest } from '@services/personal.request';
+import { editAvatarRequest, editUserInfoRequest } from '@services/personal.request';
 import { getUserInfoAction } from '@src/pages/layout/store/actions';
 import { EditUserInfoAction, SubmitAvatarAction } from '@pages/personal/types/action.type';
-import { AxiosResponse } from 'axios';
-import { IResponse } from '@services/types/response.interface';
-import { ISubmitData } from '../types/request.interface';
 
 function* submitAvatar(action: SubmitAvatarAction) {
   const imgData: FormData = action.data;
@@ -22,8 +19,9 @@ function* submitAvatar(action: SubmitAvatarAction) {
 function* editUserInfo(action: EditUserInfoAction) {
   const { data } = action;
   try {
-    const result: AxiosResponse<IResponse<any>> = yield;
-    console.log(result);
+    yield editUserInfoRequest(data);
+    yield put(getUserInfoAction);
+    yield message.success('更新成功');
   } catch (err) {
     yield message.error(err.response.data.message);
   }

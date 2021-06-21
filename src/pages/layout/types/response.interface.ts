@@ -6,8 +6,10 @@ export interface IUserInfo {
   email?: string;
   nickname?: string;
   gender: string;
+  intro: string;
+  city: { id: number; city: string }[];
+  dateOfBirth: string;
   createAt: number;
   updateAt: number;
-  roleId: number;
   avatar: string;
 }

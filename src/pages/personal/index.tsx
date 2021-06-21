@@ -1,9 +1,10 @@
 import React, { memo, FC, useEffect, useRef, useCallback, ChangeEvent, useState } from 'react';
-import { Button, Card, Cascader, DatePicker, Form, Input, Modal, Radio } from 'antd';
+import { Button, Card, Cascader, DatePicker, Form, Input, message, Modal, Radio } from 'antd';
 import { CascaderOptionType, CascaderValueType } from 'antd/lib/cascader';
 import { AxiosResponse } from 'axios';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { Dispatch } from 'redux';
+import moment from 'moment';
 import Bread from '../../components/bread';
 import { ICity } from './types/response.interface';
 import { getCityListRequest } from '../../services/personal.request';
@@ -46,6 +47,23 @@ const Personal: FC = () => {
 
   const dispatch = useDispatch<Dispatch<ReducerActionType>>();
   const uploadRef = useRef<HTMLInputElement>(null);
+  const [form] = Form.useForm();
+
+  useEffect(() => {
+    if (userinfo) {
+      // 给form表单设置默认值
+      form.setFieldsValue({
+        nickname: userinfo?.nickname,
+        phone: userinfo?.phone,
+        intro: userinfo?.intro,
+        city: userinfo?.city.map((item) => item.city),
+        dateOfBirth: moment(Number(userinfo?.dateOfBirth)),
+        gender: userinfo?.gender,
+      });
+      // 设置当前选择的城市
+      setCurrentSelectedCity(handleCascadeOption(userinfo.city, 'id', 'city'));
+    }
+  }, [userinfo]);
 
   useEffect(() => {
     // 默认将获得省级城市
@@ -56,70 +74,91 @@ const Personal: FC = () => {
     }
   }, []);
   // 请求城市一级列表
-  const requestAFirstLevelList = async (id: number): Promise<ICity[]> => {
+  const requestAFirstLevelList = useCallback(async (id: number): Promise<ICity[]> => {
     const {
       data: { data },
     }: AxiosResponse<IResponse<ICity[]>> = await getCityListRequest(id);
     return data;
-  };
+  }, []);
+
   // 选择城市 动态加载
-  const loadData = async (selectedOptions?: CascaderOptionType[]) => {
-    if (selectedOptions) {
-      const targetOption: CascaderOptionType = selectedOptions[selectedOptions.length - 1];
-      targetOption.loading = true;
-      const cityList: ICity[] = await requestAFirstLevelList(targetOption.value as number);
-      const option: CascaderOptionType[] = handleCascadeOption(cityList);
-      targetOption.loading = false;
-      targetOption.isLeaf = !cityList.length;
-      if (cityList.length) {
-        targetOption.children = option;
+  const loadData = useCallback(
+    async (selectedOptions?: CascaderOptionType[]) => {
+      if (selectedOptions) {
+        const targetOption: CascaderOptionType = selectedOptions[selectedOptions.length - 1];
+        targetOption.loading = true;
+        const cityList: ICity[] = await requestAFirstLevelList(targetOption.value as number);
+        const option: CascaderOptionType[] = handleCascadeOption(cityList);
+        targetOption.loading = false;
+        targetOption.isLeaf = !cityList.length;
+        if (cityList.length) {
+          targetOption.children = option;
+        }
+        setOptions([...options]);
       }
-      setOptions([...options]);
-    }
-  };
+    },
+    [options],
+  );
+
   // 线上数据和本地数据渲染的 格式化
-  const handleCascadeOption = (list: ICity[]): CascaderOptionType[] =>
-    list.map((item) => ({
-      value: item.id,
-      label: item.placeName,
-      isLeaf: false,
-    }));
+  const handleCascadeOption = useCallback(
+    (list: any[], valueKey?: string, labelKey?: string): CascaderOptionType[] =>
+      list.map((item) => ({
+        value: valueKey ? item[valueKey] : item.id,
+        label: labelKey ? item[labelKey] : item.placeName,
+        isLeaf: false,
+      })),
+    [],
+  );
+
   // 选择的城市改变触发函数
-  const citySelectedChange = (value: CascaderValueType, selectedOptions?: CascaderOptionType[]) => {
+  const citySelectedChange = useCallback((value: CascaderValueType, selectedOptions?: CascaderOptionType[]) => {
     if (selectedOptions) {
       setCurrentSelectedCity(selectedOptions);
     }
-  };
+  }, []);
 
-  const onFinish = (values: IValues) => {
-    const selectedCityList = (): CityList[] =>
-      currentSelectedCity.map(
-        (item): CityList => ({
-          id: item.value as number,
-          city: item.label as string,
-        }),
-      );
-    const submitData: ISubmitData = {
-      city: selectedCityList(),
-      gender: values.gender,
-      intro: values.intro,
-      phone: values.phone,
-      nickname: values.nickname,
-      dateOfBirth: values.dateOfBirth.format('llll'),
-    };
-    dispatch(editUserInfoAction(submitData));
-  };
+  // 提交数据方法
+  const onFinish = useCallback(
+    (values: IValues) => {
+      const selectedCityList = (): CityList[] =>
+        currentSelectedCity.map(
+          (item): CityList => ({
+            id: item.value as number,
+            city: item.label as string,
+          }),
+        );
+      const submitData: ISubmitData = {
+        city: selectedCityList(),
+        gender: values.gender,
+        intro: values.intro,
+        phone: values.phone,
+        nickname: values.nickname,
+        dateOfBirth: moment(values.dateOfBirth).valueOf(),
+      };
+      dispatch(editUserInfoAction(submitData));
+    },
+    [currentSelectedCity],
+  );
+
   // ImageCrop组件 裁剪好的图片数据的回调
   const imageCropChange = useCallback((blob: Blob | null) => {
     // 裁剪好的图片
     setBlobImg(blob);
   }, []);
 
-  // 上传文件input
+  // 上传文件input Change事件
   const uploadChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target?.files?.length) {
-      setUploadImg(e.target?.files ? e.target?.files[0] : null);
-      setIsModalVisible(true);
+      // eslint-disable-next-line no-underscore-dangle
+      const _file = e.target.files[0];
+      const isUpload = _file.type.indexOf('image/png') !== -1 && _file.size < 1024 * 1024;
+      if (isUpload) {
+        setUploadImg(e.target?.files ? e.target?.files[0] : null);
+        setIsModalVisible(true);
+      } else {
+        message.error('仅可上传.png格式 和 图片大小小于1M的图片');
+      }
     } else {
       setIsModalVisible(false);
     }
@@ -127,8 +166,9 @@ const Personal: FC = () => {
       uploadRef.current.value = '';
     }
   };
+
   // 提交头像
-  const handleOk = () => {
+  const handleOk = useCallback(() => {
     if (blobImg && uploadImgFile) {
       const file: File = convertFile(blobImg, uploadImgFile.name);
       const data = new FormData();
@@ -137,18 +177,20 @@ const Personal: FC = () => {
       dispatch(submitAvatarAction(data));
       setIsModalVisible(false);
     }
-  };
+  }, [blobImg, uploadImgFile]);
 
-  const handleCancel = () => {
+  // 关闭头像提交对话框
+  const handleCancel = useCallback(() => {
     //    取消提交
     setIsModalVisible(false);
     setUploadImg(null);
-  };
+  }, []);
+
   return (
     <Card title={<Bread />}>
       <PersonalWrapper>
         <div className="personal-form">
-          <Form {...layout} name="basic" initialValues={{ gender: '男' }} onFinish={onFinish}>
+          <Form {...layout} name="basic" initialValues={{ gender: '男' }} onFinish={onFinish} form={form}>
             <Form.Item label="昵称" name="nickname">
               <Input />
             </Form.Item>
@@ -188,7 +230,13 @@ const Personal: FC = () => {
             <img src={userinfo?.avatar} alt="头像" />
             <div className="avatar-img-mask">
               <span>更换头像</span>
-              <input type="file" ref={uploadRef} onChange={uploadChange} className="upload-file-input" />
+              <input
+                type="file"
+                ref={uploadRef}
+                onChange={uploadChange}
+                className="upload-file-input"
+                accept="image/png,image/jpeg"
+              />
             </div>
           </div>
         </div>
