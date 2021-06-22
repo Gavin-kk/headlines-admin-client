@@ -1,28 +1,27 @@
 import React, { memo, FC, useState, useCallback, useEffect, useRef } from 'react';
 import Bread from '@components/bread';
-import { Button, Card, Form, Input, Modal, notification, Select } from 'antd';
+import { Button, Card, Form, Input, notification, Select } from 'antd';
 import { ArgsProps } from 'antd/lib/notification';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { RuleObject } from 'rc-field-form/lib/interface';
 import { ISubmit } from '@src/store/types/request.interface';
-import { Dispatch } from 'redux';
 import { useForm } from 'antd/lib/form/Form';
 import BraftEditor from 'braft-editor';
-import { PlusOutlined } from '@ant-design/icons';
+import { UploadFile } from 'antd/lib/upload/interface';
 import RichBraftEditor from './components/braft-editor';
 import CoverUpload from '../../components/cover-upload';
 import { changeSubmissionStatusAction, getChannelListAction, submitArticleAction } from './store/actions';
 import { IRootReducer } from '../../store/types/root-reducer.interface';
-import { ReducerActionType } from './types/action.type';
 import { ArticleStatus } from '../article/components/table';
 import { CoverUploadUploadWrapper } from './style';
-import AddMaterial from '../material/components/add-material';
-import { deleteMaterialRequest, uploadMaterialRequest } from '../../services/material.request';
+import { uploadMaterialRequest } from '../../services/material.request';
+import { deleteMaterialAction } from '../material/store/actions';
 
 const layout = {
   labelCol: { span: 2 },
   wrapperCol: { span: 21 },
 };
+
 const tailLayout = {
   wrapperCol: { offset: 2, span: 21 },
 };
@@ -39,14 +38,12 @@ const Publish: FC = () => {
   );
 
   const [richBraftEditorHtml, setRichBraftEditorHtml] = useState<string | null>(null);
-  const [imageUrl, setImgUrl] = useState<string>('');
   const [status, setStatus] = useState<ArticleStatus>(ArticleStatus.pendingReview);
-  const [disabled, setDisabled] = useState<boolean>(false);
-  const [uploadMaterialDialog, setUploadMaterialDialog] = useState<boolean>(false);
-  const [coverImageList, setCoverImageList] = useState<any[]>([]);
+  // 上传文件的列表
+  const [fileList, setFileList] = useState<UploadFile<any>[]>([]);
 
   const [form] = useForm();
-  const dispatch = useDispatch<Dispatch<ReducerActionType>>();
+  const dispatch = useDispatch();
   const richTextEditorRef = useRef<BraftEditor>(null);
 
   useEffect(() => {
@@ -55,9 +52,8 @@ const Publish: FC = () => {
         dispatch(changeSubmissionStatusAction(false));
       }, 1000);
       form.resetFields();
-      setImgUrl('');
+      setFileList([]);
       setRichBraftEditorHtml('');
-      setDisabled(false);
       richTextEditorRef.current?.clearEditorContent();
     }
   }, [submissionStatus]);
@@ -78,12 +74,12 @@ const Publish: FC = () => {
       const submit: ISubmit = {
         ...values,
         content: richBraftEditorHtml,
-        cover: imageUrl,
+        cover: fileList.map((item) => item.url) as string[],
         status,
       };
       dispatch(submitArticleAction(submit));
     },
-    [status, imageUrl, richBraftEditorHtml],
+    [status, richBraftEditorHtml, fileList],
   );
 
   // 存为草稿
@@ -106,18 +102,15 @@ const Publish: FC = () => {
     await Promise.resolve();
   }, []);
 
-  const coverUploadImg = useCallback((imgUrl: string) => {
-    setImgUrl(imgUrl);
-    setDisabled(true);
+  // 已上传的文件
+  const fileListChange = useCallback((fileList: UploadFile<any>[]) => {
+    setFileList(fileList);
   }, []);
 
-  // 显示上传素材对话框
-  const uploadDialogShow = () => setUploadMaterialDialog(true);
-  // 关闭上传素材对话框
-  const uploadDialogHide = () => setUploadMaterialDialog(false);
-  // 确定上传使用素材或上传素材
-  const confirmUploadCover = () => {
-    // 在这里发送提交网络请求
+  // 已上传文件预览的删除事件
+  const onRemove = (file: UploadFile) => {
+    // 发送删除请求
+    dispatch(deleteMaterialAction(+file.uid, 'auto'));
   };
 
   return (
@@ -129,42 +122,17 @@ const Publish: FC = () => {
         <Form.Item label="内容">
           <RichBraftEditor onChange={richBraftEditorChange} value={richBraftEditorHtml} ref={richTextEditorRef} />
         </Form.Item>
-        <Form.Item label="封面">
+        <Form.Item label="封面" shouldUpdate>
           <CoverUploadUploadWrapper>
-            {!coverImageList.length ? (
-              <div className="cover-upload-btn" onClick={uploadDialogShow}>
-                <PlusOutlined className="up-icon cover-upload" />
-                <span className="cover-upload-title cover-upload">Upload</span>
-              </div>
-            ) : (
-              <div className="cover-upload-box">
-                {coverImageList.map((item) => (
-                  <div key={item} className="cover-upload-img">
-                    <span>item</span>
-                  </div>
-                ))}
-                {/* <div className="cover-upload-img" /> */}
-                {/* <div className="cover-upload-img" /> */}
-              </div>
-            )}
-
-            <Modal
-              title="上传素材"
-              visible={uploadMaterialDialog}
-              onOk={confirmUploadCover}
-              onCancel={uploadDialogHide}
-            >
-              <CoverUpload
-                uploadRequestMethods={uploadMaterialRequest}
-                deleteUploadedPictureRequestMethods={deleteMaterialRequest}
-                name="file"
-                idIndex="id"
-                urlIndex="imgs"
-                deleteUploadedFlag={!uploadMaterialDialog}
-              />
-            </Modal>
+            <CoverUpload
+              uploadRequestMethods={uploadMaterialRequest}
+              name="file"
+              idIndex="id"
+              urlIndex="imgs"
+              onChange={fileListChange}
+              onRemove={onRemove}
+            />
           </CoverUploadUploadWrapper>
-          {/* <CoverUpload onChange={coverUploadImg} imageUrl={imageUrl} disabled={disabled} /> */}
         </Form.Item>
         <Form.Item label="频道" name="channel" rules={[{ required: true, message: '频道不可为空' }]}>
           <Select style={{ width: 200 }} placeholder="请选择频道" allowClear>

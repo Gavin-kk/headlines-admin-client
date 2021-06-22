@@ -1,5 +1,5 @@
 import React, { FC, memo, useCallback, useEffect, useMemo, useState } from 'react';
-import { message, Modal, Upload } from 'antd';
+import { Modal, Upload } from 'antd';
 import { UploadChangeParam, UploadFile } from 'antd/lib/upload/interface';
 import { UploadRequestOption as RcCustomRequestOptions } from 'rc-upload/lib/interface';
 import { PlusOutlined } from '@ant-design/icons';
@@ -11,18 +11,12 @@ interface IProps {
   urlIndex: string;
   idIndex: string;
   uploadRequestMethods: (data: FormData) => Promise<AxiosResponse>;
-  deleteUploadedPictureRequestMethods: (id: number) => Promise<AxiosResponse>;
-  deleteUploadedFlag: boolean; // 什么时候删除 当此值为true时将调用 deleteUploadedPictureRequestMethods 删除已上传的图片
+  onChange?: (fileList: UploadFile<any>[]) => void;
+  onRemove?: (file: UploadFile) => void | boolean | Promise<void | boolean>;
+  children?: JSX.Element;
 }
 
-const CoverUpload: FC<IProps> = ({
-  name,
-  uploadRequestMethods,
-  urlIndex,
-  idIndex,
-  deleteUploadedPictureRequestMethods,
-  deleteUploadedFlag,
-}) => {
+const CoverUpload: FC<IProps> = ({ name, uploadRequestMethods, urlIndex, idIndex, onChange, onRemove, children }) => {
   const [fileList, setFileList] = useState<UploadFile<any>[]>([]);
   const [previewDialogIsShow, setPreviewDialogIsShow] = useState<boolean>(false);
   // 预览上传文件的对话框的title
@@ -31,13 +25,11 @@ const CoverUpload: FC<IProps> = ({
   const [currentPreviewImage, setCurrentPreviewImage] = useState<string>('');
 
   useEffect(() => {
-    if (deleteUploadedFlag) {
-      fileList.map(async (item) => {
-        console.log(item.uid);
-        await deleteUploadedPictureRequestMethods(+item.uid);
-      });
+    if (onChange) {
+      // 每次filelist改变时 触发
+      onChange(fileList.filter((item) => item.status === 'done'));
     }
-  }, [deleteUploadedFlag]);
+  }, [fileList, onChange]);
 
   const customRequest = useCallback(
     async (options: RcCustomRequestOptions) => {
@@ -82,7 +74,7 @@ const CoverUpload: FC<IProps> = ({
     () => (
       <div>
         <PlusOutlined />
-        <div style={{ marginTop: 8 }}>Upload</div>
+        <div style={{ marginTop: 8 }}>文件上传</div>
       </div>
     ),
     [],
@@ -92,7 +84,7 @@ const CoverUpload: FC<IProps> = ({
     setPreviewDialogIsShow(false);
     setTitle('');
     setCurrentPreviewImage('');
-  }, [fileList]);
+  }, []);
 
   return (
     <CoverUploadWrapper>
@@ -104,9 +96,12 @@ const CoverUpload: FC<IProps> = ({
         onChange={handleChange}
         maxCount={8}
         accept="image/png"
+        onRemove={onRemove}
+        // style={{ width: 204 }}
       >
-        {fileList.length >= 8 ? null : uploadButton}
+        {fileList.length >= 8 ? null : <>{uploadButton}</>}
       </Upload>
+      {children}
       <Modal visible={previewDialogIsShow} title={title} footer={null} onCancel={handleCancel}>
         <img alt="example" style={{ width: '100%' }} src={currentPreviewImage} />
       </Modal>

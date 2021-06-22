@@ -1,4 +1,4 @@
-import React, { memo, FC, useEffect, useCallback, useMemo, useState } from 'react';
+import React, { memo, FC, useEffect, useCallback, useState } from 'react';
 import { Card, Pagination, Tabs } from 'antd';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { Dispatch } from 'redux';
@@ -78,10 +78,10 @@ const Material: FC = () => {
     },
     [defaultPage, defaultLikePage],
   );
-  // 渲染素材组件
-  const handleAllImgRender = useMemo(
-    () =>
-      materialList?.map((item) => (
+  // 渲染素材组件  // 渲染喜欢的素材组件
+  const handleAllImgRender = useCallback(
+    (list: any[] | null) =>
+      list?.map((item) => (
         <MImage
           key={item.id}
           data={item}
@@ -91,22 +91,7 @@ const Material: FC = () => {
           id={item.id}
         />
       )),
-    [materialList],
-  );
-  // 渲染喜欢的素材组件
-  const handleLikeImgRender = useMemo(
-    () =>
-      likeList?.map((item) => (
-        <MImage
-          key={item.id}
-          data={item}
-          srcIndex="matter"
-          likeClickEvent={likeClickEvent}
-          deleteClickEvent={deleteClickEvent}
-          id={item.id}
-        />
-      )),
-    [likeList],
+    [],
   );
 
   const handlePagination = useCallback(
@@ -134,12 +119,12 @@ const Material: FC = () => {
       <Card title={<Bread />} extra={<AddMaterial />}>
         <Tabs tabPosition="left">
           <TabPane tab="全部素材" key={Tab.ALL}>
-            <div className="img-box">{handleAllImgRender}</div>
+            <div className="img-box">{handleAllImgRender(materialList)}</div>
             {handlePagination(page, false)}
           </TabPane>
 
           <TabPane tab="我喜欢的" key={Tab.LIKE}>
-            <div className="img-box">{handleLikeImgRender}</div>
+            <div className="img-box">{handleAllImgRender(likeList)}</div>
             {handlePagination(likePage, true)}
           </TabPane>
         </Tabs>

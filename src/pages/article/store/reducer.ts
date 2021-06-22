@@ -14,7 +14,6 @@ function reducer(state = defaultState, action: ReducerActionType): IArticleState
   return produce(state, (draft: WritableDraft<IArticleState>) => {
     switch (action.type) {
       case ActionType.CHANGE_LIST_OF_ARTICLES:
-        console.log(action.data);
         draft.articleInfo = action.data;
         return draft;
       case ActionType.CHANGE_CHANNEL_LIST:

@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 export const CoverUploadWrapper = styled.div`
+  display: flex;
   img {
     width: 108px;
     height: 108px;
